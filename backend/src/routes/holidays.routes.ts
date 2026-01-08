@@ -17,7 +17,7 @@ function validateHolidaysQuery(
   req: Request,
   res: Response,
   next: NextFunction
-): void {
+): void | Response {
   const { country, year, month } = req.query;
 
   // Validate country
@@ -184,10 +184,7 @@ router.get('/by-range', async (req: Request, res: Response, next: NextFunction):
     );
 
     res.json({
-      data: Array.from(holidaysByDate.entries()).map(([date, holidays]) => ({
-        date,
-        holidays
-      })),
+      data: Object.fromEntries(holidaysByDate),
       meta: {
         country: country.toUpperCase(),
         year: yearNum,
@@ -202,3 +199,4 @@ router.get('/by-range', async (req: Request, res: Response, next: NextFunction):
 });
 
 export default router;
+

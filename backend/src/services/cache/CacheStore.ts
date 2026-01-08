@@ -53,7 +53,7 @@ export interface ICacheStore {
 
 /**
  * In-memory cache store implementation
- * 
+ *
  * SOLID Principle: Single Responsibility
  * Only responsible for caching logic, no framework dependencies
  */
@@ -167,3 +167,6 @@ export class InMemoryCacheStore implements ICacheStore {
     }, 5 * 60 * 1000); // 5 minutes
   }
 }
+
+// Alias for backward compatibility
+export const CacheStore = InMemoryCacheStore;

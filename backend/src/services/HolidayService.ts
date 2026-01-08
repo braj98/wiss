@@ -1,123 +1,116 @@
+import { InMemoryCacheStore, ICacheStore } from './cache/CacheStore.js';
+import { HolidayDataProvider } from './HolidayDataProvider.js';
+import { RegularHoliday } from '../types/index.js';
+
 /**
  * HolidayService
- * 
- * Coordinates holiday data fetching with caching
- * Supports 3 data sources: file, mock, or API (configured via HOLIDAY_SOURCE env)
- * Single Responsibility: Holiday data orchestration
+ *
+ * Orchestration service that coordinates caching and data provider calls.
+ * Supports 3 data sources: file, mock, api (based on HOLIDAY_SOURCE env var)
+ * Follows Single Responsibility Principle - only handles coordination, not implementation details.
  */
-
-import { HolidayDataProvider } from './HolidayDataProvider.js';
-import { ICacheStore, InMemoryCacheStore } from './cache/CacheStore.js';
-import type { RegularHoliday } from '../types/index.js';
-
 export class HolidayService {
-  private dataProvider: HolidayDataProvider;
   private cache: ICacheStore;
-  private readonly cacheTtlMs = 30 * 24 * 60 * 60 * 1000; // 30 days
+  private dataProvider: HolidayDataProvider;
 
   constructor(
-    dataProvider?: HolidayDataProvider,
-    cache?: ICacheStore
+    cache?: ICacheStore,
+    dataProvider?: HolidayDataProvider
   ) {
-    this.dataProvider = dataProvider || new HolidayDataProvider();
     this.cache = cache || new InMemoryCacheStore();
+    this.dataProvider = dataProvider || new HolidayDataProvider();
   }
 
   /**
-   * Fetch holidays with caching
-   * @param country ISO country code
-   * @param year Year (1900-2100)
-   * @param month Month (1-12)
-   * @returns Array of RegularHoliday objects
+   * Fetch holidays for a specific country, year, and month
+   * Uses cache-first strategy with 30-day TTL
    */
   async fetchHolidays(
     country: string,
     year: number,
     month: number
   ): Promise<RegularHoliday[]> {
-    // Generate cache key
-    const cacheKey = this.getCacheKey(country, year, month);
+    const cacheKey = this.generateCacheKey(country, year, month);
+
+    console.log(`[HolidayService] Fetching holidays for ${country} ${year}-${month}`);
 
     // Check cache first
     const cached = this.cache.get<RegularHoliday[]>(cacheKey);
-    if (cached !== null) {
+    if (cached) {
+      console.log(`[HolidayService] Cache hit for ${cacheKey} (${cached.length} holidays)`);
       return cached;
     }
 
-    // Fetch from data provider (file/mock/api based on HOLIDAY_SOURCE env)
+    console.log(`[HolidayService] Cache miss for ${cacheKey}, calling data provider`);
+
+    // Fetch from data provider (respects HOLIDAY_SOURCE env var)
     const holidays = await this.dataProvider.getHolidays(country, year, month);
 
-    // Store in cache
-    this.cache.set(cacheKey, holidays, this.cacheTtlMs);
+    // Cache the result
+    this.cache.set(cacheKey, holidays);
+    console.log(`[HolidayService] Cached ${holidays.length} holidays for ${cacheKey}`);
 
     return holidays;
   }
 
   /**
-   * Fetch holidays for multiple months with caching
-   * @param country ISO country code
-   * @param year Year
-   * @param months Array of months (1-12)
-   * @returns Map of holidays keyed by date
+   * Fetch holidays for multiple months in parallel
    */
   async fetchHolidaysForMonths(
     country: string,
     year: number,
     months: number[]
   ): Promise<Map<string, RegularHoliday[]>> {
+    console.log(`[HolidayService] Fetching holidays for ${country} ${year}, months: ${months.join(', ')}`);
 
-    // Fetch all months (parallel)
-    const promises = months.map((month) =>
+    // Fetch all months in parallel
+    const promises = months.map(month =>
       this.fetchHolidays(country, year, month)
     );
 
-    const allHolidays = await Promise.all(promises);
+    const results = await Promise.all(promises);
 
-    // Group by date
-    const byDate = new Map<string, RegularHoliday[]>();
+    // Group by month
+    const byMonth = new Map<string, RegularHoliday[]>();
+    months.forEach((month, index) => {
+      const monthKey = `${year}-${month.toString().padStart(2, '0')}`;
+      byMonth.set(monthKey, results[index]);
+    });
 
-    for (const holidays of allHolidays) {
-      for (const holiday of holidays) {
-        const date = holiday.date;
-        if (!byDate.has(date)) {
-          byDate.set(date, []);
-        }
-        byDate.get(date)!.push(holiday);
-      }
-    }
-
-    return byDate;
+    console.log(`[HolidayService] Fetched holidays for ${results.length} months`);
+    return byMonth;
   }
 
   /**
    * Clear cache for specific country/year/month
    */
   clearCache(country: string, year: number, month: number): void {
-    const cacheKey = this.getCacheKey(country, year, month);
+    const cacheKey = this.generateCacheKey(country, year, month);
     this.cache.delete(cacheKey);
+    console.log(`[HolidayService] Cleared cache for ${cacheKey}`);
   }
 
   /**
-   * Clear all cache
+   * Clear all cache entries
    */
   clearAllCache(): void {
     this.cache.clear();
+    console.log('[HolidayService] Cleared all cache');
   }
 
   /**
    * Get cache statistics
    */
   getCacheStats(): { size: number; ttlMs: number } {
-    return {
-      size: this.cache.size(),
-      ttlMs: this.cacheTtlMs
-    };
+    const size = this.cache.size();
+    const ttlMs = 30 * 24 * 60 * 60 * 1000; // 30 days
+    return { size, ttlMs };
   }
 
   /**
-   * Generate cache key
+   * Generate cache key for holidays
    */
-  private getCacheKey(country: string, year: number, month: number): string {
-    return `holidays:${country.toUpperCase()}:${year}:${month.toString().padStart(2, '0')}`;
+  private generateCacheKey(country: string, year: number, month: number): string {
+    return `holidays:${country.toUpperCase()}:${year}:${month}`;
   }
 }

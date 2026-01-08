@@ -1,231 +1,170 @@
+import axios, { AxiosResponse } from 'axios';
+import { RegularHoliday, ExternalApiHoliday } from '../types/index.js';
+
+/**
+ * Custom error class for API errors
+ */
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public statusCode?: number,
+    public isRetryable: boolean = false
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
 /**
  * ExternalHolidayApiClient
  *
- * Single Responsibility: Call openholidaysapi.org with retry logic
- * Handles all communication with external holiday data provider
- * API Docs: https://www.openholidaysapi.org/
+ * Service for fetching holiday data from external APIs with intelligent retry logic.
+ * Follows Single Responsibility Principle - only handles external API communication.
  */
-
-import axios, { AxiosError } from 'axios';
-import type { RegularHoliday } from '../types/index.js';
-
-/**
- * Response types from openholidaysapi.org PublicHolidays endpoint
- */
-interface OpenHolidaysApiName {
-  language: string;
-  text: string;
-}
-
-interface OpenHolidaysApiSubdivision {
-  code: string;
-  shortName: string;
-}
-
-interface OpenHolidaysApiHoliday {
-  id: string;
-  startDate: string;
-  endDate: string;
-  type: string; // "Public", "Observance", etc.
-  name: OpenHolidaysApiName[];
-  regionalScope: string;
-  temporalScope: string;
-  nationwide: boolean;
-  subdivisions?: OpenHolidaysApiSubdivision[];
-}
-
 export class ExternalHolidayApiClient {
-  private baseUrl: string;
-  private retryConfig = {
-    maxRetries: 3,
-    baseDelay: 1000, // 1 second
-    multiplier: 2,
-    maxDelay: 8000 // 8 seconds
-  };
+  private readonly baseUrl = 'https://api.holidayapi.com/v1/holidays';
+  private readonly timeoutMs = 5000; // 5 seconds
+  private readonly maxRetries = 3;
+  private readonly baseDelayMs = 1000; // 1 second
+  private readonly maxDelayMs = 8000; // 8 seconds
 
-  constructor(baseUrl: string = 'https://openholidaysapi.org') {
-    this.baseUrl = baseUrl;
+  constructor() {
+    // Constructor can accept config if needed in future
   }
 
   /**
-   * Fetch holidays from openholidaysapi.org with retry logic
-   * @param country ISO 3166-1 alpha-2 country code (e.g., 'US', 'DE')
-   * @param year Year (1900-2100)
-   * @param month Month (1-12)
-   * @returns Array of RegularHoliday objects
-   * @throws Error if all retries exhausted
+   * Fetch holidays for a specific country, year, and month
    */
-  async fetchHolidays(
+  public async fetchHolidays(
     country: string,
     year: number,
     month: number
   ): Promise<RegularHoliday[]> {
-    return this.fetchWithRetry(() =>
-      this.callExternalApi(country, year, month)
-    );
+    console.log(`[ExternalHolidayApiClient] Fetching holidays for ${country} ${year}-${month}`);
+
+    try {
+      const holidays = await this.fetchWithRetry(
+        () => this.callExternalApi(country, year, month),
+        0
+      );
+
+      console.log(`[ExternalHolidayApiClient] Successfully fetched ${holidays.length} holidays`);
+      return holidays;
+    } catch (error) {
+      console.error('[ExternalHolidayApiClient] Failed to fetch holidays:', error);
+      throw error;
+    }
   }
 
   /**
-   * Make HTTP call to openholidaysapi.org PublicHolidays endpoint
+   * Make HTTP request to external holiday API
    */
   private async callExternalApi(
     country: string,
     year: number,
     month: number
   ): Promise<RegularHoliday[]> {
+    const apiKey = process.env.HOLIDAY_API_KEY || 'demo';
+    const url = `${this.baseUrl}?key=${apiKey}&country=${country}&year=${year}&month=${month}`;
+
+    console.log(`[ExternalHolidayApiClient] Calling API: ${url.replace(apiKey, '***')}`);
+
     try {
-      // Calculate date range for the month
-      const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
-      const endDate = `${year}-${String(month).padStart(2, '0')}-${new Date(year, month, 0).getDate()}`;
-
-      const url = `${this.baseUrl}/PublicHolidays`;
-
-      const response = await axios.get<OpenHolidaysApiHoliday[]>(url, {
-        params: {
-          countryIsoCode: country.toUpperCase(),
-          validFrom: startDate,
-          validTo: endDate,
-          languageIsoCode: 'EN'
-        },
-        timeout: 10000, // 10 second timeout
-        httpsAgent: new (await import('https')).Agent({
-          rejectUnauthorized: false
-        }),
+      const response: AxiosResponse = await axios.get(url, {
+        timeout: this.timeoutMs,
         headers: {
-          'accept': 'text/json'
+          'User-Agent': 'MyCalApp/1.0'
         }
       });
 
-      if (response.status !== 200) {
-        throw new Error(`API returned status ${response.status}`);
+      return this.transformResponse(response.data.holidays || [], country);
+    } catch (error: any) {
+      console.error('[ExternalHolidayApiClient] API call failed:', error.message);
+
+      if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
+        throw new ApiError('Request timeout', undefined, true);
       }
 
-      // Response is an array directly, not wrapped in a 'data' object
-      return this.transformResponse(response.data, country);
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        throw new ApiError(
-          error.code || 'NETWORK_ERROR',
-          error.message,
-          error.response?.status
-        );
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 429 || (status >= 500 && status < 600)) {
+          throw new ApiError(`HTTP ${status}`, status, true);
+        } else {
+          throw new ApiError(`HTTP ${status}`, status, false);
+        }
       }
-      throw error;
+
+      throw new ApiError('Network error', undefined, true);
     }
   }
 
   /**
-   * Transform openholidaysapi.org response to internal model
+   * Transform external API response to internal RegularHoliday format
    */
   private transformResponse(
-    holidays: OpenHolidaysApiHoliday[],
+    holidays: ExternalApiHoliday[],
     country: string
   ): RegularHoliday[] {
-    return holidays.map((holiday) => {
-      // Get English name from the name array
-      const englishName = holiday.name.find(n => n.language === 'EN')?.text ||
-                          holiday.name[0]?.text ||
-                          'Unknown Holiday';
-      const sanitizedName = englishName.substring(0, 200);
-
-      // Determine category from type
-      const isNational = holiday.type === 'Public' && holiday.nationwide;
-      const category = isNational ? 'national' : 'observance';
-
-      // Get first subdivision code if available
-      const region = holiday.subdivisions?.[0]?.code || null;
-
-      return {
-        id: holiday.id,
-        name: sanitizedName,
-        date: holiday.startDate,
-        country: country.toUpperCase(),
-        region: region,
-        category: category as 'national' | 'observance',
-        description: `${holiday.type}${holiday.regionalScope !== 'National' ? ` (${holiday.regionalScope})` : ''}`,
-        isPublicHoliday: isNational
-      };
-    });
+    return holidays.map((holiday) => ({
+      id: this.generateId(holiday, country),
+      name: this.truncateName(holiday.name || 'Unknown Holiday'),
+      date: holiday.date,
+      country: country.toUpperCase(),
+      region: null, // External API doesn't provide regions
+      category: this.determineCategory(holiday),
+      description: holiday.description || holiday.name || 'Holiday',
+      isPublicHoliday: holiday.type?.includes('public_holiday') || false
+    }));
   }
 
   /**
-   * Fetch with exponential backoff retry logic
+   * Generate unique ID for holiday
+   */
+  private generateId(holiday: ExternalApiHoliday, country: string): string {
+    const date = holiday.date;
+    const name = holiday.name?.replace(/\s+/g, '_').toLowerCase() || 'unknown';
+    return `ext_${country}_${date}_${name}`.substring(0, 100);
+  }
+
+  /**
+   * Truncate holiday names to 200 characters
+   */
+  private truncateName(name: string): string {
+    return name.length > 200 ? name.substring(0, 200) : name;
+  }
+
+  /**
+   * Determine holiday category from external API data
+   */
+  private determineCategory(holiday: ExternalApiHoliday): 'national' | 'observance' {
+    if (holiday.type?.includes('public_holiday') || holiday.type?.includes('national')) {
+      return 'national';
+    }
+    return 'observance';
+  }
+
+  /**
+   * Recursive retry logic with exponential backoff
    */
   private async fetchWithRetry<T>(
     fn: () => Promise<T>,
-    attempt: number = 0
+    attempt: number
   ): Promise<T> {
     try {
       return await fn();
-    } catch (error) {
-      if (
-        attempt < this.retryConfig.maxRetries &&
-        this.isRetryable(error)
-      ) {
-        const delay = Math.min(
-          this.retryConfig.baseDelay *
-            Math.pow(this.retryConfig.multiplier, attempt),
-          this.retryConfig.maxDelay
-        );
+    } catch (error: any) {
+      const isRetryable = error instanceof ApiError ? error.isRetryable : false;
 
-        console.log(
-          `Retry attempt ${attempt + 1}/${this.retryConfig.maxRetries} after ${delay}ms`
-        );
-
-        await this.sleep(delay);
-        return this.fetchWithRetry(fn, attempt + 1);
+      if (!isRetryable || attempt >= this.maxRetries) {
+        console.log(`[ExternalHolidayApiClient] Not retrying (attempt ${attempt + 1}):`, error.message);
+        throw error;
       }
 
-      throw error;
+      const delay = Math.min(this.baseDelayMs * Math.pow(2, attempt), this.maxDelayMs);
+      console.log(`[ExternalHolidayApiClient] Retrying in ${delay}ms (attempt ${attempt + 1}/${this.maxRetries + 1})`);
+
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return this.fetchWithRetry(fn, attempt + 1);
     }
-  }
-
-  /**
-   * Determine if error is retryable
-   */
-  private isRetryable(error: any): boolean {
-    // Retryable: Network errors, timeouts, 5xx errors, 429
-    if (error instanceof ApiError) {
-      return (
-        error.code === 'NETWORK_ERROR' ||
-        error.code === 'ECONNABORTED' ||
-        error.code === 'ETIMEDOUT' ||
-        error.statusCode === 429 ||
-        (error.statusCode ?? 0) >= 500
-      );
-    }
-
-    if (error instanceof AxiosError) {
-      return (
-        !error.response || // Network error
-        error.code === 'ECONNABORTED' ||
-        error.code === 'ETIMEDOUT' ||
-        error.response?.status === 429 ||
-        (error.response?.status ?? 0) >= 500
-      );
-    }
-
-    return false;
-  }
-
-  /**
-   * Sleep helper for retry delays
-   */
-  private sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-}
-
-/**
- * Custom API error class
- */
-export class ApiError extends Error {
-  constructor(
-    public code: string,
-    message: string,
-    public statusCode?: number
-  ) {
-    super(message);
-    this.name = 'ApiError';
   }
 }

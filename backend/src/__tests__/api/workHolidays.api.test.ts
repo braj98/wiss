@@ -146,7 +146,7 @@ describe('API - /api/work-holidays', () => {
         .query({ year: 2025, startMonth: 1, endMonth: 3 });
 
       expect(res.status).toBe(200);
-      expect(res.body.data).toBeInstanceOf(Array);
+      expect(res.body.data).toBeInstanceOf(Object);
       expect(res.body.meta.startMonth).toBe(1);
       expect(res.body.meta.endMonth).toBe(3);
     });

@@ -7,9 +7,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import axios from 'axios';
 import {
-  ExternalHolidayApiClient,
-  ApiError
-} from '../../services/ExternalHolidayApiClient.js';
+  ExternalHolidayApiClient
+} from '../../services/ExternalHolidayApiClient';
 
 // Mock axios
 vi.mock('axios');

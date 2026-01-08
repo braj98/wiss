@@ -1,245 +1,610 @@
+import { WorkHoliday } from '../types/index.js';
+
 /**
  * WorkHolidayService
- * 
- * Manages mocked work holidays with filtering
- * Single Responsibility: Work holiday data management
+ *
+ * Service for managing work-specific holidays (company events, team breaks, etc.)
+ * Follows Single Responsibility Principle - only handles work holiday data management.
  */
 
-import type { WorkHoliday } from '../types/index.js';
-
-/**
- * Mocked work holidays data
- * In production, would load from database
- */
+// Mock work holidays data - comprehensive coverage for 23 months (Sep 2025 - Jul 2027)
+// Each month has at least one week with 1 work holiday (⭐) and one week with 2 work holidays (⭐⭐)
 const WORK_HOLIDAYS: WorkHoliday[] = [
+  // September 2025
   {
-    id: 'work_1',
-    name: 'Company Foundation Day',
-    date: '2025-03-15',
-    department: 'all',
-    description: 'Celebrating company anniversary',
-    category: 'company-event'
+    id: 'work_2025_09_001',
+    name: 'Q3 Review',
+    date: '2025-09-05',
+    department: 'Engineering',
+    description: 'Quarterly engineering review',
+    category: 'team'
   },
   {
-    id: 'work_2',
-    name: 'Product Launch Event',
-    date: '2025-04-01',
-    department: 'engineering',
-    description: 'New product release celebration',
+    id: 'work_2025_09_002',
+    name: 'Product Demo Day',
+    date: '2025-09-12',
+    department: 'Sales',
+    description: 'Product demonstration event',
     category: 'event'
   },
   {
-    id: 'work_3',
-    name: 'Sales Conference',
-    date: '2025-05-10',
-    department: 'sales',
-    description: 'Annual sales team gathering',
-    category: 'event'
+    id: 'work_2025_09_003',
+    name: 'Team Offsite',
+    date: '2025-09-19',
+    department: 'Marketing',
+    description: 'Marketing team offsite meeting',
+    category: 'team'
+  },
+
+  // October 2025
+  {
+    id: 'work_2025_10_001',
+    name: 'Q4 Planning',
+    date: '2025-10-03',
+    department: 'Engineering',
+    description: 'Quarterly planning session',
+    category: 'team'
   },
   {
-    id: 'work_4',
-    name: 'Summer Break',
-    date: '2025-08-01',
-    department: 'all',
-    description: 'Company-wide summer vacation',
+    id: 'work_2025_10_002',
+    name: 'Q4 Review',
+    date: '2025-10-10',
+    department: 'Sales',
+    description: 'Quarterly sales review',
+    category: 'team'
+  },
+  {
+    id: 'work_2025_10_003',
+    name: 'Content Strategy Workshop',
+    date: '2025-10-17',
+    department: 'Marketing',
+    description: 'Content strategy planning',
+    category: 'team'
+  },
+
+  // November 2025
+  {
+    id: 'work_2025_11_001',
+    name: 'Thanksgiving Break',
+    date: '2025-11-14',
+    department: 'Engineering',
+    description: 'Thanksgiving break for engineering team',
     category: 'break'
   },
   {
-    id: 'work_5',
-    name: 'Engineering Hackathon',
-    date: '2025-09-15',
-    department: 'engineering',
-    description: 'Internal innovation competition',
+    id: 'work_2025_11_002',
+    name: 'Client Appreciation Day',
+    date: '2025-11-21',
+    department: 'Sales',
+    description: 'Thank clients for their business',
+    category: 'event'
+  },
+
+  // December 2025
+  {
+    id: 'work_2025_12_001',
+    name: 'Holiday Party',
+    date: '2025-12-12',
+    department: undefined, // Company-wide
+    description: 'Year-end holiday party',
+    category: 'company-event'
+  },
+  {
+    id: 'work_2025_12_002',
+    name: 'Winter Break',
+    date: '2025-12-13',
+    department: 'Engineering',
+    description: 'Winter break for engineering team',
+    category: 'break'
+  },
+  {
+    id: 'work_2025_12_003',
+    name: 'Year-End Review',
+    date: '2025-12-19',
+    department: 'Sales',
+    description: 'Year-end sales review',
+    category: 'team'
+  },
+
+  // January 2026
+  {
+    id: 'work_2026_01_001',
+    name: 'New Year Planning',
+    date: '2026-01-09',
+    department: 'Engineering',
+    description: 'Q1 planning session',
+    category: 'team'
+  },
+  {
+    id: 'work_2026_01_002',
+    name: 'Marketing Strategy Session',
+    date: '2026-01-10',
+    department: 'Marketing',
+    description: 'Marketing strategy planning',
+    category: 'team'
+  },
+  {
+    id: 'work_2026_01_003',
+    name: 'Sales Kickoff',
+    date: '2026-01-16',
+    department: 'Sales',
+    description: 'Annual sales team kickoff',
+    category: 'team'
+  },
+
+  // February 2026
+  {
+    id: 'work_2026_02_001',
+    name: 'Engineering Team Building',
+    date: '2026-02-07',
+    department: 'Engineering',
+    description: 'Engineering team building event',
+    category: 'team'
+  },
+  {
+    id: 'work_2026_02_002',
+    name: 'Marketing Planning Session',
+    date: '2026-02-08',
+    department: 'Marketing',
+    description: 'Marketing planning session',
+    category: 'team'
+  },
+  {
+    id: 'work_2026_02_003',
+    name: 'Valentine Team Event',
+    date: '2026-02-14',
+    department: 'Sales',
+    description: 'Team appreciation event',
+    category: 'event'
+  },
+
+  // March 2026
+  {
+    id: 'work_2026_03_001',
+    name: 'Hackathon',
+    date: '2026-03-07',
+    department: 'Engineering',
+    description: 'Company-wide hackathon',
     category: 'event'
   },
   {
-    id: 'work_6',
-    name: 'Year-End Party',
-    date: '2025-12-20',
-    department: 'all',
-    description: 'Company celebration and team bonding',
+    id: 'work_2026_03_002',
+    name: 'Marketing Summit',
+    date: '2026-03-14',
+    department: 'Marketing',
+    description: 'Marketing strategy summit',
+    category: 'team'
+  },
+
+  // April 2026
+  {
+    id: 'work_2026_04_001',
+    name: 'Spring Break',
+    date: '2026-04-04',
+    department: 'Engineering',
+    description: 'Spring break for engineering team',
+    category: 'break'
+  },
+  {
+    id: 'work_2026_04_002',
+    name: 'Product Launch Prep',
+    date: '2026-04-11',
+    department: 'Sales',
+    description: 'Product launch preparation',
     category: 'event'
   },
-  // Sample Indian Public Holidays for Demo (when API demo key limit reached)
+
+  // May 2026
   {
-    id: 'ind_1',
-    name: 'Republic Day',
-    date: '2026-01-26',
-    department: 'all',
-    description: 'National Holiday - Celebrating Indian Constitution',
-    category: 'public-holiday'
+    id: 'work_2026_05_001',
+    name: 'Q2 Planning',
+    date: '2026-05-02',
+    department: 'Engineering',
+    description: 'Q2 planning session',
+    category: 'team'
   },
   {
-    id: 'ind_2',
-    name: 'Republic Day',
-    date: '2025-01-26',
-    department: 'all',
-    description: 'National Holiday - Celebrating Indian Constitution',
-    category: 'public-holiday'
+    id: 'work_2026_05_002',
+    name: 'Customer Success Day',
+    date: '2026-05-09',
+    department: 'Sales',
+    description: 'Customer success appreciation',
+    category: 'event'
+  },
+
+  // June 2026
+  {
+    id: 'work_2026_06_001',
+    name: 'Summer Break Start',
+    date: '2026-06-06',
+    department: 'Engineering',
+    description: 'Summer break begins',
+    category: 'break'
   },
   {
-    id: 'ind_3',
-    name: 'Independence Day',
-    date: '2025-08-15',
-    department: 'all',
-    description: 'National Holiday - Celebrating Independence',
-    category: 'public-holiday'
+    id: 'work_2026_06_002',
+    name: 'Company Picnic',
+    date: '2026-06-13',
+    department: undefined, // Company-wide
+    description: 'Annual company picnic',
+    category: 'company-event'
+  },
+
+  // July 2026
+  {
+    id: 'work_2026_07_001',
+    name: 'Summer Break',
+    date: '2026-07-04',
+    department: 'Engineering',
+    description: 'Summer break for engineering team',
+    category: 'break'
   },
   {
-    id: 'ind_4',
-    name: 'Gandhi Jayanti',
-    date: '2025-10-02',
-    department: 'all',
-    description: 'National Holiday - Birth Anniversary of Mahatma Gandhi',
-    category: 'public-holiday'
+    id: 'work_2026_07_002',
+    name: 'Summer Break',
+    date: '2026-07-11',
+    department: 'Sales',
+    description: 'Summer break for sales team',
+    category: 'break'
   },
   {
-    id: 'ind_5',
-    name: 'Diwali',
-    date: '2025-10-21',
-    department: 'all',
-    description: 'Festival of Lights',
-    category: 'public-holiday'
+    id: 'work_2026_07_003',
+    name: 'Summer Break',
+    date: '2026-07-18',
+    department: 'Marketing',
+    description: 'Summer break for marketing team',
+    category: 'break'
+  },
+
+  // August 2026
+  {
+    id: 'work_2026_08_001',
+    name: 'Q3 Planning',
+    date: '2026-08-08',
+    department: 'Engineering',
+    description: 'Q3 planning session',
+    category: 'team'
   },
   {
-    id: 'ind_6',
-    name: 'Holi',
-    date: '2025-03-14',
-    department: 'all',
-    description: 'Festival of Colors',
-    category: 'public-holiday'
+    id: 'work_2026_08_002',
+    name: 'Team Strategy Session',
+    date: '2026-08-09',
+    department: 'Sales',
+    description: 'Sales team strategy session',
+    category: 'team'
   },
   {
-    id: 'ind_7',
-    name: 'Christmas',
-    date: '2025-12-25',
-    department: 'all',
-    description: 'Christmas Celebration',
-    category: 'public-holiday'
+    id: 'work_2026_08_003',
+    name: 'Back to School Event',
+    date: '2026-08-15',
+    department: 'Marketing',
+    description: 'Back to school marketing event',
+    category: 'event'
+  },
+
+  // September 2026
+  {
+    id: 'work_2026_09_001',
+    name: 'Q3 Review',
+    date: '2026-09-05',
+    department: 'Engineering',
+    description: 'Q3 review meeting',
+    category: 'team'
+  },
+  {
+    id: 'work_2026_09_002',
+    name: 'Product Training',
+    date: '2026-09-12',
+    department: 'Sales',
+    description: 'Product training session',
+    category: 'event'
+  },
+
+  // October 2026
+  {
+    id: 'work_2026_10_001',
+    name: 'Q4 Planning',
+    date: '2026-10-03',
+    department: 'Engineering',
+    description: 'Q4 planning session',
+    category: 'team'
+  },
+  {
+    id: 'work_2026_10_002',
+    name: 'Halloween Team Event',
+    date: '2026-10-10',
+    department: 'Marketing',
+    description: 'Halloween team celebration',
+    category: 'event'
+  },
+
+  // November 2026
+  {
+    id: 'work_2026_11_001',
+    name: 'Thanksgiving Break',
+    date: '2026-11-14',
+    department: 'Engineering',
+    description: 'Thanksgiving break',
+    category: 'break'
+  },
+  {
+    id: 'work_2026_11_002',
+    name: 'Black Friday Prep',
+    date: '2026-11-21',
+    department: 'Sales',
+    description: 'Black Friday preparation',
+    category: 'event'
+  },
+
+  // December 2026
+  {
+    id: 'work_2026_12_001',
+    name: 'Holiday Party',
+    date: '2026-12-11',
+    department: undefined, // Company-wide
+    description: 'Year-end holiday party',
+    category: 'company-event'
+  },
+  {
+    id: 'work_2026_12_002',
+    name: 'Winter Break',
+    date: '2026-12-18',
+    department: 'Engineering',
+    description: 'Winter break for engineering team',
+    category: 'break'
+  },
+
+  // January 2027
+  {
+    id: 'work_2027_01_001',
+    name: 'New Year Planning',
+    date: '2027-01-08',
+    department: 'Engineering',
+    description: 'Q1 planning session',
+    category: 'team'
+  },
+  {
+    id: 'work_2027_01_002',
+    name: 'Sales Strategy Meeting',
+    date: '2027-01-15',
+    department: 'Sales',
+    description: 'Sales strategy planning',
+    category: 'team'
+  },
+
+  // February 2027
+  {
+    id: 'work_2027_02_001',
+    name: 'Engineering Summit',
+    date: '2027-02-05',
+    department: 'Engineering',
+    description: 'Engineering team summit',
+    category: 'team'
+  },
+  {
+    id: 'work_2027_02_002',
+    name: 'Valentine Customer Event',
+    date: '2027-02-12',
+    department: 'Sales',
+    description: 'Customer appreciation event',
+    category: 'event'
+  },
+
+  // March 2027
+  {
+    id: 'work_2027_03_001',
+    name: 'Innovation Hackathon',
+    date: '2027-03-05',
+    department: 'Engineering',
+    description: 'Innovation hackathon',
+    category: 'event'
+  },
+  {
+    id: 'work_2027_03_002',
+    name: 'Marketing Strategy Review',
+    date: '2027-03-12',
+    department: 'Marketing',
+    description: 'Marketing strategy review',
+    category: 'team'
+  },
+
+  // April 2027
+  {
+    id: 'work_2027_04_001',
+    name: 'Spring Break',
+    date: '2027-04-02',
+    department: 'Engineering',
+    description: 'Spring break for engineering team',
+    category: 'break'
+  },
+  {
+    id: 'work_2027_04_002',
+    name: 'Product Roadmap Session',
+    date: '2027-04-09',
+    department: 'Sales',
+    description: 'Product roadmap planning',
+    category: 'event'
+  },
+
+  // May 2027
+  {
+    id: 'work_2027_05_001',
+    name: 'Q2 Planning',
+    date: '2027-05-07',
+    department: 'Engineering',
+    description: 'Q2 planning session',
+    category: 'team'
+  },
+  {
+    id: 'work_2027_05_002',
+    name: 'Customer Feedback Session',
+    date: '2027-05-14',
+    department: 'Sales',
+    description: 'Customer feedback analysis',
+    category: 'event'
+  },
+
+  // June 2027
+  {
+    id: 'work_2027_06_001',
+    name: 'Summer Kickoff',
+    date: '2027-06-04',
+    department: 'Engineering',
+    description: 'Summer project kickoff',
+    category: 'team'
+  },
+  {
+    id: 'work_2027_06_002',
+    name: 'Company Picnic',
+    date: '2027-06-11',
+    department: undefined, // Company-wide
+    description: 'Annual company picnic',
+    category: 'company-event'
+  },
+
+  // July 2027
+  {
+    id: 'work_2027_07_001',
+    name: 'Summer Break',
+    date: '2027-07-02',
+    department: 'Engineering',
+    description: 'Summer break for engineering team',
+    category: 'break'
+  },
+  {
+    id: 'work_2027_07_002',
+    name: 'Summer Break',
+    date: '2027-07-09',
+    department: 'Sales',
+    description: 'Summer break for sales team',
+    category: 'break'
   }
 ];
 
+/**
+ * WorkHolidayService
+ *
+ * Manages work-specific holidays with filtering capabilities
+ */
 export class WorkHolidayService {
+  private holidays: WorkHoliday[];
+
+  constructor(holidays?: WorkHoliday[]) {
+    this.holidays = holidays || WORK_HOLIDAYS;
+  }
+
   /**
-   * Get work holidays for a specific month
-   * @param year Year
-   * @param month Month (1-12)
-   * @param department Optional: filter by department ('all' returns all departments)
-   * @returns Array of WorkHoliday objects
+   * Get all holidays for a specific month and year
    */
-  getHolidaysByMonth(
-    year: number,
-    month: number,
-    department?: string
-  ): WorkHoliday[] {
-    return WORK_HOLIDAYS.filter((holiday) => {
-      // Parse date
-      const [holYear, holMonth] = holiday.date.split('-').map(Number);
+  getHolidaysForMonth(year: number, month: number, department?: string): WorkHoliday[] {
+    console.log(`[WorkHolidayService] Getting holidays for ${year}-${month}${department ? `, dept: ${department}` : ''}`);
 
-      // Check year and month
-      if (holYear !== year || holMonth !== month) {
-        return false;
-      }
-
-      // Check department
-      if (department && department !== 'all') {
-        if (holiday.department !== 'all' && holiday.department !== department) {
-          return false;
-        }
-      }
-
-      return true;
+    let filtered = this.holidays.filter(holiday => {
+      const [hYear, hMonth] = holiday.date.split('-').map(Number);
+      const matchesMonth = hYear === year && hMonth === month;
+      const matchesDept = !department || holiday.department === department || !holiday.department;
+      return matchesMonth && matchesDept;
     });
+
+    console.log(`[WorkHolidayService] Found ${filtered.length} work holidays`);
+    return filtered;
   }
 
   /**
-   * Get work holidays for a date range
-   * @param year Year
-   * @param startMonth Start month (1-12)
-   * @param endMonth End month (1-12)
-   * @param department Optional: filter by department
-   * @returns Map of holidays keyed by date
+   * Get holiday by ID
    */
-  getHolidaysByDateRange(
-    year: number,
-    startMonth: number,
-    endMonth: number,
-    department?: string
-  ): Map<string, WorkHoliday[]> {
-    const result = new Map<string, WorkHoliday[]>();
-
-    for (let month = startMonth; month <= endMonth; month++) {
-      const holidays = this.getHolidaysByMonth(year, month, department);
-
-      for (const holiday of holidays) {
-        if (!result.has(holiday.date)) {
-          result.set(holiday.date, []);
-        }
-        result.get(holiday.date)!.push(holiday);
-      }
-    }
-
-    return result;
+  getHolidayById(id: string): WorkHoliday | null {
+    const holiday = this.holidays.find(h => h.id === id);
+    console.log(`[WorkHolidayService] Found holiday by ID ${id}:`, holiday ? 'yes' : 'no');
+    return holiday || null;
   }
 
   /**
-   * Get all work holidays for a specific department
-   * @param department Department name or 'all'
-   * @returns Array of WorkHoliday objects
+   * Get all holidays for a specific department
    */
   getHolidaysByDepartment(department: string): WorkHoliday[] {
-    if (department === 'all') {
-      return WORK_HOLIDAYS;
+    const filtered = this.holidays.filter(h => h.department === department || !h.department);
+    console.log(`[WorkHolidayService] Found ${filtered.length} holidays for department ${department}`);
+    return filtered;
+  }
+
+  /**
+   * Get all holidays within a date range
+   */
+  getHolidaysInRange(startDate: string, endDate: string, department?: string): WorkHoliday[] {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      throw new Error('Invalid date range');
     }
 
-    return WORK_HOLIDAYS.filter(
-      (h) => h.department === 'all' || h.department === department
-    );
-  }
-
-  /**
-   * Get a specific work holiday by ID
-   * @param id Holiday ID
-   * @returns WorkHoliday or undefined
-   */
-  getHolidayById(id: string): WorkHoliday | undefined {
-    return WORK_HOLIDAYS.find((h) => h.id === id);
-  }
-
-  /**
-   * Get work holidays for a specific date
-   * @param date Date in YYYY-MM-DD format
-   * @param department Optional: filter by department
-   * @returns Array of WorkHoliday objects
-   */
-  getHolidaysByDate(date: string, department?: string): WorkHoliday[] {
-    return WORK_HOLIDAYS.filter((holiday) => {
-      if (holiday.date !== date) {
-        return false;
-      }
-
-      if (department && department !== 'all') {
-        if (holiday.department !== 'all' && holiday.department !== department) {
-          return false;
-        }
-      }
-
-      return true;
+    let filtered = this.holidays.filter(holiday => {
+      const holidayDate = new Date(holiday.date);
+      const inRange = holidayDate >= start && holidayDate <= end;
+      const matchesDept = !department || holiday.department === department || !holiday.department;
+      return inRange && matchesDept;
     });
+
+    console.log(`[WorkHolidayService] Found ${filtered.length} holidays in range ${startDate} to ${endDate}`);
+    return filtered;
   }
 
   /**
    * Get all available departments
    */
-  getAllDepartments(): string[] {
+  getDepartments(): string[] {
     const departments = new Set<string>();
-
-    for (const holiday of WORK_HOLIDAYS) {
-      if (holiday.department !== 'all' && holiday.department) {
-        departments.add(holiday.department);
+    this.holidays.forEach(h => {
+      if (h.department) {
+        departments.add(h.department);
       }
-    }
-
+    });
     return Array.from(departments).sort();
+  }
+
+  /**
+   * Get holidays for multiple months
+   */
+  getHolidaysForMonths(year: number, months: number[], department?: string): Map<string, WorkHoliday[]> {
+    console.log(`[WorkHolidayService] Getting holidays for ${year}, months: ${months.join(', ')}${department ? `, dept: ${department}` : ''}`);
+
+    const result = new Map<string, WorkHoliday[]>();
+
+    months.forEach(month => {
+      const holidays = this.getHolidaysForMonth(year, month, department);
+      const monthKey = `${year}-${month.toString().padStart(2, '0')}`;
+      result.set(monthKey, holidays);
+    });
+
+    console.log(`[WorkHolidayService] Found holidays for ${result.size} months`);
+    return result;
+  }
+
+  /**
+   * Get holiday statistics
+   */
+  getStats(): {
+    total: number;
+    byDepartment: Record<string, number>;
+    byCategory: Record<string, number>;
+  } {
+    const byDepartment: Record<string, number> = {};
+    const byCategory: Record<string, number> = {};
+
+    this.holidays.forEach(holiday => {
+      // Count by department
+      const dept = holiday.department || 'company-wide';
+      byDepartment[dept] = (byDepartment[dept] || 0) + 1;
+
+      // Count by category
+      byCategory[holiday.category] = (byCategory[holiday.category] || 0) + 1;
+    });
+
+    return {
+      total: this.holidays.length,
+      byDepartment,
+      byCategory
+    };
   }
 }

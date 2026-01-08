@@ -3,180 +3,121 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { WorkHolidayService } from '../../services/WorkHolidayService.js';
+import { WorkHolidayService } from '../../services/WorkHolidayService';
 
 describe('WorkHolidayService', () => {
   const service = new WorkHolidayService();
 
-  describe('getHolidaysByMonth', () => {
+  describe('getHolidaysForMonth', () => {
     it('should return holidays for specific month', () => {
-      const holidays = service.getHolidaysByMonth(2025, 3);
-      
+      const holidays = service.getHolidaysForMonth(2025, 9);
+
       expect(holidays).toBeInstanceOf(Array);
       expect(holidays.length).toBeGreaterThan(0);
-      
-      // All holidays should be in March 2025
+
+      // All holidays should be in September 2025
       for (const holiday of holidays) {
-        expect(holiday.date.startsWith('2025-03')).toBe(true);
+        expect(holiday.date.startsWith('2025-09')).toBe(true);
       }
     });
 
     it('should filter by department', () => {
-      const holidays = service.getHolidaysByMonth(2025, 4, 'engineering');
-      
+      const holidays = service.getHolidaysForMonth(2025, 7, 'Engineering');
+
       // All holidays should be for engineering or available to all
       for (const holiday of holidays) {
         expect(
-          holiday.department === 'engineering' || holiday.department === 'all'
+          holiday.department === 'Engineering' || holiday.department === undefined
         ).toBe(true);
       }
     });
 
     it('should return empty array for month with no holidays', () => {
-      const holidays = service.getHolidaysByMonth(2025, 2);
-      
+      const holidays = service.getHolidaysForMonth(2025, 2);
+
       expect(holidays).toEqual([]);
     });
 
     it('should include company-wide holidays regardless of department', () => {
-      const engineeringHolidays = service.getHolidaysByMonth(2025, 8, 'engineering');
-      const salesHolidays = service.getHolidaysByMonth(2025, 8, 'sales');
-      
+      const engineeringHolidays = service.getHolidaysForMonth(2025, 7, 'Engineering');
+      const salesHolidays = service.getHolidaysForMonth(2025, 7, 'Sales');
+
       // Both should have the summer break
-      const hasBreakEngineering = engineeringHolidays.some(h => h.name === 'Summer Break');
-      const hasBreakSales = salesHolidays.some(h => h.name === 'Summer Break');
-      
+      const hasBreakEngineering = engineeringHolidays.some((h: any) => h.name === 'Summer Break');
+      const hasBreakSales = salesHolidays.some((h: any) => h.name === 'Summer Break');
+
       expect(hasBreakEngineering).toBe(true);
       expect(hasBreakSales).toBe(true);
     });
   });
 
-  describe('getHolidaysByDateRange', () => {
+  describe('getHolidaysInRange', () => {
     it('should return holidays for date range', () => {
-      const holidays = service.getHolidaysByDateRange(2025, 1, 3);
-      
-      expect(holidays).toBeInstanceOf(Map);
-      expect(holidays.size).toBeGreaterThan(0);
-    });
+      const holidays = service.getHolidaysInRange('2025-09-01', '2025-12-31');
 
-    it('should return holidays keyed by date', () => {
-      const holidays = service.getHolidaysByDateRange(2025, 3, 3);
-      
-      for (const [date, holidayList] of holidays.entries()) {
-        expect(typeof date).toBe('string');
-        expect(date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-        expect(Array.isArray(holidayList)).toBe(true);
-      }
+      expect(holidays).toBeInstanceOf(Array);
+      expect(holidays.length).toBeGreaterThan(0);
     });
 
     it('should filter by department for range', () => {
-      const holidays = service.getHolidaysByDateRange(2025, 1, 12, 'engineering');
-      
-      for (const holidayList of holidays.values()) {
-        for (const holiday of holidayList) {
-          expect(
-            holiday.department === 'engineering' || holiday.department === 'all'
-          ).toBe(true);
-        }
+      const holidays = service.getHolidaysInRange('2025-01-01', '2025-12-31', 'Engineering');
+
+      for (const holiday of holidays) {
+        expect(
+          holiday.department === 'Engineering' || holiday.department === undefined
+        ).toBe(true);
       }
     });
   });
 
   describe('getHolidaysByDepartment', () => {
-    it('should return all holidays when department is "all"', () => {
-      const holidays = service.getHolidaysByDepartment('all');
-      
-      expect(holidays.length).toBeGreaterThan(0);
-    });
-
     it('should return specific department holidays', () => {
-      const holidays = service.getHolidaysByDepartment('engineering');
-      
+      const holidays = service.getHolidaysByDepartment('Engineering');
+
       for (const holiday of holidays) {
         expect(
-          holiday.department === 'engineering' || holiday.department === 'all'
+          holiday.department === 'Engineering' || holiday.department === undefined
         ).toBe(true);
-      }
-    });
-
-    it('should return company-wide holidays for non-existent department', () => {
-      const holidays = service.getHolidaysByDepartment('nonexistent');
-      
-      // Non-existent departments return all company-wide holidays (department === 'all')
-      expect(holidays.length).toBeGreaterThan(0);
-      
-      for (const holiday of holidays) {
-        expect(holiday.department).toBe('all');
       }
     });
   });
 
   describe('getHolidayById', () => {
     it('should return holiday by ID', () => {
-      const holiday = service.getHolidayById('work_1');
-      
+      const holiday = service.getHolidayById('work_2025_09_001');
+
       expect(holiday).toBeDefined();
-      expect(holiday?.id).toBe('work_1');
-      expect(holiday?.name).toBe('Company Foundation Day');
+      expect(holiday?.id).toBe('work_2025_09_001');
+      expect(holiday?.name).toBe('Q3 Review');
     });
 
-    it('should return undefined for non-existent ID', () => {
+    it('should return null for non-existent ID', () => {
       const holiday = service.getHolidayById('nonexistent');
-      
-      expect(holiday).toBeUndefined();
+
+      expect(holiday).toBeNull();
     });
   });
 
-  describe('getHolidaysByDate', () => {
-    it('should return holidays for specific date', () => {
-      const holidays = service.getHolidaysByDate('2025-03-15');
-      
-      expect(holidays).toBeInstanceOf(Array);
-      
-      for (const holiday of holidays) {
-        expect(holiday.date).toBe('2025-03-15');
-      }
-    });
-
-    it('should filter by department for specific date', () => {
-      const holidays = service.getHolidaysByDate('2025-04-01', 'engineering');
-      
-      for (const holiday of holidays) {
-        expect(holiday.date).toBe('2025-04-01');
-        expect(
-          holiday.department === 'engineering' || holiday.department === 'all'
-        ).toBe(true);
-      }
-    });
-
-    it('should return empty array for date with no holidays', () => {
-      const holidays = service.getHolidaysByDate('2025-01-15');
-      
-      expect(holidays).toEqual([]);
-    });
-  });
-
-  describe('getAllDepartments', () => {
+  describe('getDepartments', () => {
     it('should return list of all departments', () => {
-      const departments = service.getAllDepartments();
-      
+      const departments = service.getDepartments();
+
       expect(Array.isArray(departments)).toBe(true);
       expect(departments.length).toBeGreaterThan(0);
-      expect(departments).not.toContain('all'); // 'all' is not a specific department
     });
 
     it('should return sorted departments', () => {
-      const departments = service.getAllDepartments();
+      const departments = service.getDepartments();
       const sorted = [...departments].sort();
-      
+
       expect(departments).toEqual(sorted);
     });
 
     it('should include expected departments', () => {
-      const departments = service.getAllDepartments();
-      
-      expect(departments).toContain('engineering');
-      expect(departments).toContain('sales');
+      const departments = service.getDepartments();
+
+      expect(departments).toContain('Engineering');
+      expect(departments).toContain('Sales');
     });
   });
 });

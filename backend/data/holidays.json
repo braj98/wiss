@@ -1,270 +1,269 @@
 {
-  "description": "Sample holidays data file - can be used instead of online API",
+  "description": "India holidays data (central/national focus)",
   "countries": {
-    "IN": [
+    "IN_2025": [
       {
-        "id": "ind_1",
-        "name": "Republic Day",
-        "date": "2026-01-26",
+        "id": "ind_2025_1",
+        "name": "New Year's Day",
+        "date": "2025-01-01",
         "country": "IN",
         "region": null,
         "category": "national",
-        "description": "National Holiday - Celebrating Indian Constitution",
-        "isPublicHoliday": true
+        "description": "New Year's Day",
+        "isPublicHoliday": false
       },
       {
-        "id": "ind_2",
+        "id": "ind_2025_2",
         "name": "Republic Day",
         "date": "2025-01-26",
         "country": "IN",
         "region": null,
         "category": "national",
-        "description": "National Holiday - Celebrating Indian Constitution",
+        "description": "Republic Day of India",
         "isPublicHoliday": true
       },
       {
-        "id": "ind_3",
+        "id": "ind_2025_3",
+        "name": "Maha Shivratri",
+        "date": "2025-02-26",
+        "country": "IN",
+        "region": null,
+        "category": "religious",
+        "description": "Maha Shivratri",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2025_4",
+        "name": "Holi",
+        "date": "2025-03-14",
+        "country": "IN",
+        "region": null,
+        "category": "religious",
+        "description": "Festival of Colors",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2025_5",
+        "name": "Id-ul-Fitr",
+        "date": "2025-03-31",
+        "country": "IN",
+        "region": null,
+        "category": "religious",
+        "description": "End of Ramadan",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2025_6",
+        "name": "Ram Navami",
+        "date": "2025-04-06",
+        "country": "IN",
+        "region": null,
+        "category": "religious",
+        "description": "Birth of Lord Rama",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2025_7",
+        "name": "Mahavir Jayanti",
+        "date": "2025-04-10",
+        "country": "IN",
+        "region": null,
+        "category": "religious",
+        "description": "Birth of Lord Mahavir",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2025_8",
+        "name": "Good Friday",
+        "date": "2025-04-18",
+        "country": "IN",
+        "region": null,
+        "category": "religious",
+        "description": "Good Friday",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2025_9",
         "name": "Independence Day",
         "date": "2025-08-15",
         "country": "IN",
         "region": null,
         "category": "national",
-        "description": "National Holiday - Celebrating Independence",
+        "description": "Independence Day of India",
         "isPublicHoliday": true
       },
       {
-        "id": "ind_4",
+        "id": "ind_2025_10",
+        "name": "Janmashtami",
+        "date": "2025-08-16",
+        "country": "IN",
+        "region": null,
+        "category": "religious",
+        "description": "Birth of Lord Krishna",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2025_11",
         "name": "Gandhi Jayanti",
         "date": "2025-10-02",
         "country": "IN",
         "region": null,
         "category": "national",
-        "description": "National Holiday - Birth Anniversary of Mahatma Gandhi",
+        "description": "Birth of Mahatma Gandhi",
         "isPublicHoliday": true
       },
       {
-        "id": "ind_5",
+        "id": "ind_2025_12",
+        "name": "Dussehra",
+        "date": "2025-10-20",
+        "country": "IN",
+        "region": null,
+        "category": "religious",
+        "description": "Vijayadashami",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2025_13",
         "name": "Diwali",
-        "date": "2025-10-21",
+        "date": "2025-11-01",
         "country": "IN",
         "region": null,
-        "category": "national",
+        "category": "religious",
         "description": "Festival of Lights",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2025_14",
+        "name": "Guru Nanak Jayanti",
+        "date": "2025-11-05",
+        "country": "IN",
+        "region": null,
+        "category": "religious",
+        "description": "Birth of Guru Nanak",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2025_15",
+        "name": "Christmas Day",
+        "date": "2025-12-25",
+        "country": "IN",
+        "region": null,
+        "category": "religious",
+        "description": "Christmas",
+        "isPublicHoliday": false
+      }
+    ],
+
+    "IN_2026": [
+      {
+        "id": "ind_2026_1",
+        "name": "New Year's Day",
+        "date": "2026-01-01",
+        "country": "IN",
+        "region": null,
+        "category": "national",
+        "description": "New Year's Day",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2026_2",
+        "name": "Republic Day",
+        "date": "2026-01-26",
+        "country": "IN",
+        "region": null,
+        "category": "national",
+        "description": "Republic Day of India",
         "isPublicHoliday": true
       },
       {
-        "id": "ind_6",
+        "id": "ind_2026_3",
         "name": "Holi",
-        "date": "2025-03-14",
+        "date": "2026-03-04",
         "country": "IN",
         "region": null,
-        "category": "national",
+        "category": "religious",
         "description": "Festival of Colors",
-        "isPublicHoliday": true
+        "isPublicHoliday": false
       },
       {
-        "id": "ind_7",
-        "name": "Christmas",
-        "date": "2025-12-25",
+        "id": "ind_2026_4",
+        "name": "Id-ul-Fitr",
+        "date": "2026-03-21",
         "country": "IN",
         "region": null,
-        "category": "national",
-        "description": "Christmas Celebration",
-        "isPublicHoliday": true
+        "category": "religious",
+        "description": "End of Ramadan",
+        "isPublicHoliday": false
       },
       {
-        "id": "ind_8",
-        "name": "Mahashivratri",
-        "date": "2025-02-26",
-        "country": "IN",
-        "region": null,
-        "category": "national",
-        "description": "Hindu Festival",
-        "isPublicHoliday": true
-      },
-      {
-        "id": "ind_9",
+        "id": "ind_2026_5",
         "name": "Ram Navami",
-        "date": "2025-04-07",
+        "date": "2026-03-26",
         "country": "IN",
         "region": null,
-        "category": "national",
-        "description": "Birth Anniversary of Lord Rama",
-        "isPublicHoliday": true
+        "category": "religious",
+        "description": "Birth of Lord Rama",
+        "isPublicHoliday": false
       },
       {
-        "id": "ind_10",
-        "name": "Good Friday",
-        "date": "2025-04-18",
+        "id": "ind_2026_6",
+        "name": "Mahavir Jayanti",
+        "date": "2026-03-31",
         "country": "IN",
         "region": null,
-        "category": "national",
-        "description": "Christian Holiday",
-        "isPublicHoliday": true
-      }
-    ],
-    "US": [
-      {
-        "id": "us_1",
-        "name": "New Year's Day",
-        "date": "2025-01-01",
-        "country": "US",
-        "region": null,
-        "category": "national",
-        "description": "First day of the year",
-        "isPublicHoliday": true
+        "category": "religious",
+        "description": "Birth of Lord Mahavir",
+        "isPublicHoliday": false
       },
       {
-        "id": "us_2",
-        "name": "Martin Luther King Jr. Day",
-        "date": "2025-01-20",
-        "country": "US",
-        "region": null,
-        "category": "national",
-        "description": "Third Monday of January",
-        "isPublicHoliday": true
-      },
-      {
-        "id": "us_3",
-        "name": "Presidents' Day",
-        "date": "2025-02-17",
-        "country": "US",
-        "region": null,
-        "category": "national",
-        "description": "Third Monday of February",
-        "isPublicHoliday": true
-      },
-      {
-        "id": "us_4",
-        "name": "Memorial Day",
-        "date": "2025-05-26",
-        "country": "US",
-        "region": null,
-        "category": "national",
-        "description": "Last Monday of May",
-        "isPublicHoliday": true
-      },
-      {
-        "id": "us_5",
+        "id": "ind_2026_7",
         "name": "Independence Day",
-        "date": "2025-07-04",
-        "country": "US",
+        "date": "2026-08-15",
+        "country": "IN",
         "region": null,
         "category": "national",
-        "description": "National Day",
+        "description": "Independence Day of India",
         "isPublicHoliday": true
       },
       {
-        "id": "us_6",
-        "name": "Labor Day",
-        "date": "2025-09-01",
-        "country": "US",
+        "id": "ind_2026_8",
+        "name": "Gandhi Jayanti",
+        "date": "2026-10-02",
+        "country": "IN",
         "region": null,
         "category": "national",
-        "description": "First Monday of September",
+        "description": "Birth of Mahatma Gandhi",
         "isPublicHoliday": true
       },
       {
-        "id": "us_7",
-        "name": "Thanksgiving",
-        "date": "2025-11-27",
-        "country": "US",
+        "id": "ind_2026_9",
+        "name": "Dussehra",
+        "date": "2026-10-20",
+        "country": "IN",
         "region": null,
-        "category": "national",
-        "description": "Fourth Thursday of November",
-        "isPublicHoliday": true
+        "category": "religious",
+        "description": "Vijayadashami",
+        "isPublicHoliday": false
       },
       {
-        "id": "us_8",
+        "id": "ind_2026_10",
+        "name": "Diwali",
+        "date": "2026-11-08",
+        "country": "IN",
+        "region": null,
+        "category": "religious",
+        "description": "Festival of Lights",
+        "isPublicHoliday": false
+      },
+      {
+        "id": "ind_2026_11",
         "name": "Christmas Day",
-        "date": "2025-12-25",
-        "country": "US",
+        "date": "2026-12-25",
+        "country": "IN",
         "region": null,
-        "category": "national",
-        "description": "Christmas Celebration",
-        "isPublicHoliday": true
-      }
-    ],
-    "GB": [
-      {
-        "id": "gb_1",
-        "name": "New Year's Day",
-        "date": "2025-01-01",
-        "country": "GB",
-        "region": null,
-        "category": "national",
-        "description": "First day of the year",
-        "isPublicHoliday": true
-      },
-      {
-        "id": "gb_2",
-        "name": "Good Friday",
-        "date": "2025-04-18",
-        "country": "GB",
-        "region": null,
-        "category": "national",
-        "description": "Christian Holiday",
-        "isPublicHoliday": true
-      },
-      {
-        "id": "gb_3",
-        "name": "Easter Monday",
-        "date": "2025-04-21",
-        "country": "GB",
-        "region": null,
-        "category": "national",
-        "description": "Easter Holiday",
-        "isPublicHoliday": true
-      },
-      {
-        "id": "gb_4",
-        "name": "Early May Bank Holiday",
-        "date": "2025-05-05",
-        "country": "GB",
-        "region": null,
-        "category": "national",
-        "description": "First Monday of May",
-        "isPublicHoliday": true
-      },
-      {
-        "id": "gb_5",
-        "name": "Spring Bank Holiday",
-        "date": "2025-05-26",
-        "country": "GB",
-        "region": null,
-        "category": "national",
-        "description": "Last Monday of May",
-        "isPublicHoliday": true
-      },
-      {
-        "id": "gb_6",
-        "name": "Summer Bank Holiday",
-        "date": "2025-08-25",
-        "country": "GB",
-        "region": null,
-        "category": "national",
-        "description": "Last Monday of August",
-        "isPublicHoliday": true
-      },
-      {
-        "id": "gb_7",
-        "name": "Christmas Day",
-        "date": "2025-12-25",
-        "country": "GB",
-        "region": null,
-        "category": "national",
-        "description": "Christmas Celebration",
-        "isPublicHoliday": true
-      },
-      {
-        "id": "gb_8",
-        "name": "Boxing Day",
-        "date": "2025-12-26",
-        "country": "GB",
-        "region": null,
-        "category": "national",
-        "description": "Day after Christmas",
-        "isPublicHoliday": true
+        "category": "religious",
+        "description": "Christmas",
+        "isPublicHoliday": false
       }
     ]
   }

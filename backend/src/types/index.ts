@@ -40,6 +40,14 @@ export interface ApiError {
   supportedCountries?: string[];
 }
 
+export interface ExternalApiHoliday {
+  date: string;
+  name?: string;
+  country?: { id: string; name: string };
+  type?: string[];
+  description?: string;
+}
+
 export interface CacheEntry<T> {
   value: T;
   expiresAt: number;
