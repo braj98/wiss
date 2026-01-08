@@ -1,26 +1,37 @@
 /**
  * ExternalHolidayApiClient
- * 
- * Single Responsibility: Call external holiday API with retry logic
+ *
+ * Single Responsibility: Call openholidaysapi.org with retry logic
  * Handles all communication with external holiday data provider
+ * API Docs: https://www.openholidaysapi.org/
  */
 
 import axios, { AxiosError } from 'axios';
 import type { RegularHoliday } from '../types/index.js';
 
-export interface ExternalApiHoliday {
-  date: string;
-  name: string;
-  country?: { id: string; name: string };
-  type?: string[];
-  description?: string;
+/**
+ * Response types from openholidaysapi.org PublicHolidays endpoint
+ */
+interface OpenHolidaysApiName {
+  language: string;
+  text: string;
 }
 
-export interface ExternalApiResponse {
-  status: number;
-  response?: {
-    holidays: ExternalApiHoliday[];
-  };
+interface OpenHolidaysApiSubdivision {
+  code: string;
+  shortName: string;
+}
+
+interface OpenHolidaysApiHoliday {
+  id: string;
+  startDate: string;
+  endDate: string;
+  type: string; // "Public", "Observance", etc.
+  name: OpenHolidaysApiName[];
+  regionalScope: string;
+  temporalScope: string;
+  nationwide: boolean;
+  subdivisions?: OpenHolidaysApiSubdivision[];
 }
 
 export class ExternalHolidayApiClient {
@@ -32,13 +43,13 @@ export class ExternalHolidayApiClient {
     maxDelay: 8000 // 8 seconds
   };
 
-  constructor(baseUrl: string = 'https://api.holidayapi.com/v1') {
+  constructor(baseUrl: string = 'https://openholidaysapi.org') {
     this.baseUrl = baseUrl;
   }
 
   /**
-   * Fetch holidays from external API with retry logic
-   * @param country ISO 3166-1 alpha-2 country code
+   * Fetch holidays from openholidaysapi.org with retry logic
+   * @param country ISO 3166-1 alpha-2 country code (e.g., 'US', 'DE')
    * @param year Year (1900-2100)
    * @param month Month (1-12)
    * @returns Array of RegularHoliday objects
@@ -55,39 +66,42 @@ export class ExternalHolidayApiClient {
   }
 
   /**
-   * Make HTTP call to external API
+   * Make HTTP call to openholidaysapi.org PublicHolidays endpoint
    */
   private async callExternalApi(
     country: string,
     year: number,
-    month: string | number
+    month: number
   ): Promise<RegularHoliday[]> {
     try {
-      const apiKey = process.env.HOLIDAY_API_KEY || 'demo';
-      const url = `${this.baseUrl}/holidays`;
-      
-      const response = await axios.get<ExternalApiResponse>(url, {
+      // Calculate date range for the month
+      const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+      const endDate = `${year}-${String(month).padStart(2, '0')}-${new Date(year, month, 0).getDate()}`;
+
+      const url = `${this.baseUrl}/PublicHolidays`;
+
+      const response = await axios.get<OpenHolidaysApiHoliday[]>(url, {
         params: {
-          country,
-          year,
-          month,
-          key: apiKey
+          countryIsoCode: country.toUpperCase(),
+          validFrom: startDate,
+          validTo: endDate,
+          languageIsoCode: 'EN'
         },
-        timeout: 5000 // 5 second timeout
+        timeout: 10000, // 10 second timeout
+        httpsAgent: new (await import('https')).Agent({
+          rejectUnauthorized: false
+        }),
+        headers: {
+          'accept': 'text/json'
+        }
       });
 
       if (response.status !== 200) {
         throw new Error(`API returned status ${response.status}`);
       }
 
-      if (!response.data.response?.holidays) {
-        return [];
-      }
-
-      return this.transformResponse(
-        response.data.response.holidays,
-        country
-      );
+      // Response is an array directly, not wrapped in a 'data' object
+      return this.transformResponse(response.data, country);
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new ApiError(
@@ -101,28 +115,35 @@ export class ExternalHolidayApiClient {
   }
 
   /**
-   * Transform external API response to internal model
+   * Transform openholidaysapi.org response to internal model
    */
   private transformResponse(
-    holidays: ExternalApiHoliday[],
+    holidays: OpenHolidaysApiHoliday[],
     country: string
   ): RegularHoliday[] {
     return holidays.map((holiday) => {
-      const sanitizedName = (holiday.name || '').substring(0, 200);
-      const isPublic = holiday.type?.includes('National holiday') ?? false;
-      const category = holiday.type?.includes('National holiday')
-        ? 'national'
-        : 'observance';
+      // Get English name from the name array
+      const englishName = holiday.name.find(n => n.language === 'EN')?.text ||
+                          holiday.name[0]?.text ||
+                          'Unknown Holiday';
+      const sanitizedName = englishName.substring(0, 200);
+
+      // Determine category from type
+      const isNational = holiday.type === 'Public' && holiday.nationwide;
+      const category = isNational ? 'national' : 'observance';
+
+      // Get first subdivision code if available
+      const region = holiday.subdivisions?.[0]?.code || null;
 
       return {
-        id: `${country.toLowerCase()}_${sanitizedName.toLowerCase().replace(/\s+/g, '_')}_${holiday.date}`,
+        id: holiday.id,
         name: sanitizedName,
-        date: holiday.date,
-        country,
-        region: null,
+        date: holiday.startDate,
+        country: country.toUpperCase(),
+        region: region,
         category: category as 'national' | 'observance',
-        description: holiday.description || '',
-        isPublicHoliday: isPublic
+        description: `${holiday.type}${holiday.regionalScope !== 'National' ? ` (${holiday.regionalScope})` : ''}`,
+        isPublicHoliday: isNational
       };
     });
   }

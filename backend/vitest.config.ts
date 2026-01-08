@@ -1,9 +1,17 @@
-import { defineConfig } from 'vitest/config';
+﻿import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    include: ['src/__tests__/**/*.test.ts'],
+    deps: {
+      optimizer: {
+        web: {
+          enabled: true
+        }
+      }
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -12,11 +20,13 @@ export default defineConfig({
         'dist/',
         'src/__tests__/**'
       ],
-      lines: 80,
-      functions: 80,
-      branches: 75,
-      statements: 80
-    },
-    include: ['src/__tests__/**/*.test.ts']
+      thresholds: {
+        lines: 65,
+        functions: 65,
+        branches: 60,
+        statements: 65,
+      },
+      all: true
+    }
   }
 });

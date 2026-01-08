@@ -4,7 +4,8 @@
  */
 
 /**
- * Represents a regular (government) holiday
+ * Represents a regular (public/government) holiday
+ * These are official holidays from external API
  */
 export interface RegularHoliday {
   id: string
@@ -12,21 +13,24 @@ export interface RegularHoliday {
   date: string // ISO 8601 format (YYYY-MM-DD)
   country: string // ISO 3166-1 alpha-2 code (e.g., "US", "IN")
   region?: string // Optional region/state code
-  category: string // e.g., "national", "state", "religious"
+  category: 'national' | 'state' | 'religious' | 'cultural' | 'observance' | 'public-holiday'
   description?: string
   isPublicHoliday: boolean
+  isWeekend?: boolean // Indicates if this date falls on weekend
 }
 
 /**
- * Represents a work-specific holiday (mocked data)
+ * Represents a work-specific holiday (company-specific)
+ * These are internal company holidays, team events, etc.
  */
 export interface WorkHoliday {
   id: string
   name: string
   date: string // ISO 8601 format (YYYY-MM-DD)
-  department?: string // Which department (optional)
+  department?: string // Which department (optional, 'all' for company-wide)
   description?: string // Why this day is a work holiday
-  category?: string // e.g., "company", "team"
+  category: 'company' | 'team' | 'department' | 'event' | 'break' | 'company-event' | 'public-holiday'
+  isWeekend?: boolean // Indicates if this date falls on weekend
 }
 
 /**

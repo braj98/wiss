@@ -1,5 +1,3 @@
-# Holiday API and Work Holiday API - Type Definitions
-
 export interface RegularHoliday {
   id: string;
   name: string;
@@ -17,7 +15,7 @@ export interface WorkHoliday {
   date: string; // ISO 8601: YYYY-MM-DD
   department?: string;
   description?: string;
-  category: 'company' | 'team' | 'department';
+  category: 'company' | 'team' | 'department' | 'event' | 'break' | 'company-event' | 'public-holiday';
 }
 
 export interface AggregatedHoliday {
