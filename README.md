@@ -1,0 +1,3 @@
+# MyCalApp
+
+Initial project repository.
