@@ -5,6 +5,14 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   padding: 20px;
+  position: relative;
+}
+
+.calendar-size-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
 }
 
 .calendar-controls {
@@ -18,7 +26,7 @@
 .calendar-size-control {
   display: flex;
   align-items: center;
-  gap: .calendar-size-control8px;
+  gap: 8px;
 }
 
  label {
@@ -115,14 +123,29 @@
   position: relative;
   min-height: 28px;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .calendar-day:hover {
   background: #f0f0f0;
 }
 
+.calendar-day:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 1px;
+  z-index: 10;
+}
+
 .calendar-day.empty {
-  background: transparent;
+  cursor: default;
+}
+
+.calendar-day.empty:focus {
+  outline: none;
+}
+
+.calendar-day.empty.week-with-work-holidays {
+  background-color: inherit; /* Allow week background to show through */
 }
 
 .calendar-day.today {
@@ -170,10 +193,56 @@
   cursor: pointer;
   transition: transform 0.2s ease;
   line-height: 1;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .holiday-marker:hover {
   transform: scale(1.3);
+}
+
+/* Special character indicators */
+.holiday-marker[data-special-chars="true"]::after {
+  content: " 🌐";
+  font-size: 0.5rem;
+  margin-left: 1px;
+  opacity: 0.7;
+}
+
+/* Text truncation for long holiday names */
+.holiday-marker[title*="..."] {
+  background: linear-gradient(90deg, transparent 70%, rgba(255, 152, 0, 0.1) 100%);
+}
+
+/* Week-Level Holiday Indicators - Full Week Shading */
+.calendar-day.week-with-work-holidays.week-single {
+  background-color: #fff3cd; /* Bright yellow shade for 1 work holiday */
+}
+
+.calendar-day.week-with-work-holidays.week-multiple {
+  background-color: #d1ecf1; /* Bright blue shade for multiple work holidays */
+}
+
+/* Size variants for week indicators */
+.calendar-small .week-indicator {
+  font-size: 0.4rem;
+  top: 1px;
+  right: 1px;
+}
+
+.calendar-medium .week-indicator {
+  font-size: 0.45rem;
+  top: 1px;
+  right: 1px;
+}
+
+.calendar-large .week-indicator {
+  font-size: 0.6rem;
+  top: 3px;
+  right: 3px;
+  padding: 2px 3px;
 }
 
 /* Legend */
@@ -197,6 +266,21 @@
 
 .legend-marker {
   font-size: 0.875rem;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  border: 1px solid #ddd;
+}
+
+.legend-color.week-single {
+  background-color: #fff3cd; /* Bright yellow shade for 1 work holiday */
+}
+
+.legend-color.week-multiple {
+  background-color: #d1ecf1; /* Bright blue shade for multiple work holidays */
 }
 
 /* Size Variants */
@@ -226,17 +310,116 @@
 .calendar-large .legend-item { font-size: 0.875rem; }
 
 /* Responsive - Stack on smaller screens */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .calendar-3month {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 1024px) {
+  .calendar-3month {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar {
+    padding: 12px;
+  }
+
   .calendar-3month {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
-  .calendar-controls {
-    justify-content: center;
+
+  .calendar-month {
+    padding: 12px;
+  }
+
+  .calendar-header h2 {
+    font-size: 1rem;
+  }
+
+  .calendar-day {
+    min-height: 44px;
+    font-size: 0.875rem;
+    padding: 4px;
+  }
+
+  .day-number {
+    font-size: 0.875rem;
+    margin-top: 4px;
+  }
+
+  .holiday-marker {
+    font-size: 0.75rem;
+    margin-top: 2px;
+  }
+
+  .week-indicator {
+    font-size: 0.6rem;
+    top: 3px;
+    right: 3px;
+    padding: 2px 3px;
+  }
+
+  .calendar-legend {
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .legend-item {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar {
+    padding: 8px;
+  }
+
+  .calendar-month {
+    padding: 8px;
+  }
+
+  .calendar-header h2 {
+    font-size: 0.875rem;
+  }
+
+  .current-badge {
+    font-size: 0.625rem;
+    padding: 1px 4px;
+  }
+
+  .calendar-day {
+    min-height: 48px;
+    font-size: 0.75rem;
+  }
+
+  .day-number {
+    font-size: 0.75rem;
+  }
+
+  .holiday-marker {
+    font-size: 0.625rem;
+  }
+
+  .week-indicator {
+    font-size: 0.5rem;
+    padding: 1px 2px;
+  }
+
+  .calendar-legend {
+    gap: 6px;
+  }
+
+  .legend-item {
+    font-size: 0.75rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
   }
 }

@@ -22,10 +22,15 @@ function HolidayList({ year, month, country }: HolidayListProps): React.ReactEle
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
+  // Get holidays for the specific month
+  const monthKey = `${year}-${String(month).padStart(2, '0')}`;
+  const monthRegularHolidays = regularHolidays[monthKey] || [];
+  const monthWorkHolidays = workHolidays[monthKey] || [];
+
   // Combine and sort holidays by date
   const allHolidays = [
-    ...regularHolidays.map((h) => ({ ...h, type: 'regular' as const })),
-    ...workHolidays.map((h) => ({ ...h, type: 'work' as const }))
+    ...monthRegularHolidays.map((h) => ({ ...h, type: 'regular' as const })),
+    ...monthWorkHolidays.map((h) => ({ ...h, type: 'work' as const }))
   ].sort((a, b) => a.date.localeCompare(b.date));
 
   // Group holidays by date
@@ -68,10 +73,10 @@ function HolidayList({ year, month, country }: HolidayListProps): React.ReactEle
         <h2>Holidays for {monthNames[month - 1]} {year}</h2>
         <div className="holiday-counts">
           <span className="count-badge regular">
-            🎉 {regularHolidays.length} Public Holidays
+            🎉 {monthRegularHolidays.length} Public Holidays
           </span>
           <span className="count-badge work">
-            💼 {workHolidays.length} Work Holidays
+            💼 {monthWorkHolidays.length} Work Holidays
           </span>
         </div>
       </div>

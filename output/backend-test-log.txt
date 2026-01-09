@@ -1,0 +1,1388 @@
+
+> mycalapp-backend@1.0.0 test
+> vitest
+
+
+ DEV  v1.6.1 /home/shreyasee/Documents/wissen/wiss/backend
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should successfully fetch holidays
+[ExternalHolidayApiClient] Fetching holidays for US 2025-1
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=1
+[ExternalHolidayApiClient] Successfully fetched 0 holidays
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should handle empty response
+[ExternalHolidayApiClient] Fetching holidays for US 2025-2
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=2
+[ExternalHolidayApiClient] Successfully fetched 0 holidays
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should handle missing response object
+[ExternalHolidayApiClient] Fetching holidays for US 2025-3
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=3
+[ExternalHolidayApiClient] Successfully fetched 0 holidays
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should truncate long holiday names
+[ExternalHolidayApiClient] Fetching holidays for US 2025-12
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=12
+[ExternalHolidayApiClient] Successfully fetched 0 holidays
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should not retry on 400 error
+[ExternalHolidayApiClient] Fetching holidays for INVALID 2025-1
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=INVALID&year=2025&month=1
+[ExternalHolidayApiClient] Not retrying (attempt 1): HTTP 400
+
+stderr | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should not retry on 400 error
+[ExternalHolidayApiClient] API call failed: Bad Request
+[ExternalHolidayApiClient] Failed to fetch holidays: ApiError: HTTP 400
+    at ExternalHolidayApiClient.callExternalApi (/home/shreyasee/Documents/wissen/wiss/backend/src/services/ExternalHolidayApiClient.ts:93:17)
+    at ExternalHolidayApiClient.fetchWithRetry (/home/shreyasee/Documents/wissen/wiss/backend/src/services/ExternalHolidayApiClient.ts:154:14)
+    at ExternalHolidayApiClient.fetchHolidays (/home/shreyasee/Documents/wissen/wiss/backend/src/services/ExternalHolidayApiClient.ts:46:24)
+    at /home/shreyasee/Documents/wissen/wiss/backend/src/__tests__/services/ExternalHolidayApiClient.test.ts:122:9
+    at runTest (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:781:11)
+    at runSuite (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:967:3) {
+  statusCode: 400,
+  isRetryable: false
+}
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should not retry on 401 error
+[ExternalHolidayApiClient] Fetching holidays for US 2025-1
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=1
+[ExternalHolidayApiClient] Not retrying (attempt 1): HTTP 401
+
+stderr | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should not retry on 401 error
+[ExternalHolidayApiClient] API call failed: Unauthorized
+[ExternalHolidayApiClient] Failed to fetch holidays: ApiError: HTTP 401
+    at ExternalHolidayApiClient.callExternalApi (/home/shreyasee/Documents/wissen/wiss/backend/src/services/ExternalHolidayApiClient.ts:93:17)
+    at ExternalHolidayApiClient.fetchWithRetry (/home/shreyasee/Documents/wissen/wiss/backend/src/services/ExternalHolidayApiClient.ts:154:14)
+    at ExternalHolidayApiClient.fetchHolidays (/home/shreyasee/Documents/wissen/wiss/backend/src/services/ExternalHolidayApiClient.ts:46:24)
+    at /home/shreyasee/Documents/wissen/wiss/backend/src/__tests__/services/ExternalHolidayApiClient.test.ts:139:9
+    at runTest (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:781:11)
+    at runSuite (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:967:3) {
+  statusCode: 401,
+  isRetryable: false
+}
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should not retry on 404 error
+[ExternalHolidayApiClient] Fetching holidays for XX 2025-1
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=XX&year=2025&month=1
+[ExternalHolidayApiClient] Not retrying (attempt 1): HTTP 404
+
+stderr | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should not retry on 404 error
+[ExternalHolidayApiClient] API call failed: Not Found
+[ExternalHolidayApiClient] Failed to fetch holidays: ApiError: HTTP 404
+    at ExternalHolidayApiClient.callExternalApi (/home/shreyasee/Documents/wissen/wiss/backend/src/services/ExternalHolidayApiClient.ts:93:17)
+    at ExternalHolidayApiClient.fetchWithRetry (/home/shreyasee/Documents/wissen/wiss/backend/src/services/ExternalHolidayApiClient.ts:154:14)
+    at ExternalHolidayApiClient.fetchHolidays (/home/shreyasee/Documents/wissen/wiss/backend/src/services/ExternalHolidayApiClient.ts:46:24)
+    at /home/shreyasee/Documents/wissen/wiss/backend/src/__tests__/services/ExternalHolidayApiClient.test.ts:155:9
+    at runTest (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:781:11)
+    at runSuite (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runSuite (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:909:15)
+    at runFiles (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:958:5)
+    at startTests (file:///home/shreyasee/Documents/wissen/wiss/backend/node_modules/@vitest/runner/dist/index.js:967:3) {
+  statusCode: 404,
+  isRetryable: false
+}
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should categorize national holidays correctly
+[ExternalHolidayApiClient] Fetching holidays for US 2025-1
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=1
+[ExternalHolidayApiClient] Successfully fetched 0 holidays
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should categorize observance holidays correctly
+[ExternalHolidayApiClient] Fetching holidays for US 2025-3
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=3
+[ExternalHolidayApiClient] Successfully fetched 0 holidays
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should handle multiple holidays in response
+[ExternalHolidayApiClient] Fetching holidays for US 2025-1
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=1
+[ExternalHolidayApiClient] Successfully fetched 0 holidays
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should include API key from environment
+[ExternalHolidayApiClient] Fetching holidays for US 2025-1
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=1
+[ExternalHolidayApiClient] Successfully fetched 0 holidays
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should use demo key when no API key provided
+[ExternalHolidayApiClient] Fetching holidays for US 2025-1
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=1
+[ExternalHolidayApiClient] Successfully fetched 0 holidays
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should throw error on network failure
+[ExternalHolidayApiClient] Fetching holidays for US 2025-1
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=1
+[ExternalHolidayApiClient] Retrying in 1000ms (attempt 1/4)
+
+stderr | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should throw error on network failure
+[ExternalHolidayApiClient] API call failed: Network failed
+
+stdout | new HolidayDataProvider (/home/shreyasee/Documents/wissen/wiss/backend/src/services/HolidayDataProvider.ts:109:13)
+[HolidayDataProvider] Using source: file
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return work holidays for valid year and month
+GET /api/work-holidays
+[WorkHolidayService] Getting holidays for 2025-3
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should filter by department
+GET /api/work-holidays
+[WorkHolidayService] Getting holidays for 2025-4, dept: engineering
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for missing year
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for invalid year
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for year out of range
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for missing month
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for invalid month
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for month out of range
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return work holidays for specific date
+GET /api/work-holidays/by-date
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should filter by department for specific date
+GET /api/work-holidays/by-date
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for missing date
+GET /api/work-holidays/by-date
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for invalid date format
+GET /api/work-holidays/by-date
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return work holidays for date range
+GET /api/work-holidays/by-range
+[WorkHolidayService] Getting holidays for 2025, months: 1, 2, 3
+[WorkHolidayService] Getting holidays for 2025-1
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-2
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-3
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Found holidays for 3 months
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should filter by department for date range
+GET /api/work-holidays/by-range
+[WorkHolidayService] Getting holidays for 2025, months: 1, 2, 3, 4, 5, 6, dept: sales
+[WorkHolidayService] Getting holidays for 2025-1, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-2, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-3, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-4, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-5, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-6, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Found holidays for 6 months
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return 400 for invalid month range
+GET /api/work-holidays/by-range
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/departments > should return list of all departments
+GET /api/work-holidays/departments
+
+ ❯ src/__tests__/api/workHolidays.api.test.ts  (16 tests | 6 failed) 82ms
+   ❯ src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return work holidays for specific date
+     → expected 404 to be 200 // Object.is equality
+   ❯ src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should filter by department for specific date
+     → expected 404 to be 200 // Object.is equality
+   ❯ src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for missing date
+     → expected 404 to be 400 // Object.is equality
+   ❯ src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for invalid date format
+     → expected 404 to be 400 // Object.is equality
+   ❯ src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return work holidays for date range
+     → expected { '2025-01': [], '2025-02': [], …(1) } to be an instance of Array
+   ❯ src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return 400 for invalid month range
+     → expected 'INVALID_MONTH_RANGE' to be 'INVALID_RANGE' // Object.is equality
+ ✓ src/__tests__/services/CacheStore.test.ts  (19 tests) 11ms
+ ❯ src/__tests__/services/WorkHolidayService.test.ts  (12 tests | 4 failed) 17ms
+   ❯ src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should return holidays for specific month
+     → expected 0 to be greater than 0
+   ❯ src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+     → expected false to be true // Object.is equality
+   ❯ src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should return holidays for date range
+     → expected 0 to be greater than 0
+   ❯ src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return holiday by ID
+     → expected undefined to be 'work_eng_001' // Object.is equality
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should return holidays for specific month
+[WorkHolidayService] Getting holidays for 2025-3
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should filter by department
+[WorkHolidayService] Getting holidays for 2025-7, dept: Engineering
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should return empty array for month with no holidays
+[WorkHolidayService] Getting holidays for 2025-2
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+[WorkHolidayService] Getting holidays for 2025-7, dept: Engineering
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-7, dept: Sales
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should return holidays for date range
+[WorkHolidayService] Found 0 holidays in range 2025-01-01 to 2025-03-31
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should filter by department for range
+[WorkHolidayService] Found 5 holidays in range 2025-01-01 to 2025-12-31
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysByDepartment > should return specific department holidays
+[WorkHolidayService] Found 27 holidays for department Engineering
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return holiday by ID
+[WorkHolidayService] Found holiday by ID work_eng_001: no
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return null for non-existent ID
+[WorkHolidayService] Found holiday by ID nonexistent: no
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should throw error on network failure
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=1
+[ExternalHolidayApiClient] Retrying in 2000ms (attempt 2/4)
+
+stderr | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should throw error on network failure
+[ExternalHolidayApiClient] API call failed: Network failed
+
+stdout | new HolidayDataProvider (/home/shreyasee/Documents/wissen/wiss/backend/src/services/HolidayDataProvider.ts:109:13)
+[HolidayDataProvider] Using source: file
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid country format
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid year
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for missing country
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid country code length
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for missing year
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid year range
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for missing month
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid month range
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /health > should return health status
+GET /health
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /unknown-route > should return 404 for unknown routes
+GET /unknown-route
+
+ ✓ src/__tests__/api/holidays.api.test.ts  (10 tests) 59ms
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should throw error on network failure
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=1
+[ExternalHolidayApiClient] Retrying in 4000ms (attempt 3/4)
+
+stderr | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should throw error on network failure
+[ExternalHolidayApiClient] API call failed: Network failed
+
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should handle axios error responses
+[ExternalHolidayApiClient] Fetching holidays for US 2025-1
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=1
+[ExternalHolidayApiClient] Retrying in 1000ms (attempt 1/4)
+
+stderr | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should handle axios error responses
+[ExternalHolidayApiClient] API call failed: Server error
+
+stderr | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should handle axios error responses
+<empty line>
+stdout | src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should handle axios error responses
+[ExternalHolidayApiClient] Calling API: https://api.holidayapi.com/v1/holidays?key=***&country=US&year=2025&month=1
+[ExternalHolidayApiClient] Successfully fetched 0 holidays
+
+ ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts  (14 tests | 8 failed) 6068ms
+   ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should successfully fetch holidays
+     → expected [] to have a length of 1 but got +0
+   ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should truncate long holiday names
+     → Cannot read properties of undefined (reading 'name')
+   ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should categorize national holidays correctly
+     → expected undefined to match object { category: 'national', …(1) }
+   ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should categorize observance holidays correctly
+     → expected undefined to match object { category: 'observance', …(1) }
+   ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should handle multiple holidays in response
+     → expected [] to have a length of 2 but got +0
+   ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should include API key from environment
+     → expected "wrap" to be called with arguments: [ Anything, ObjectContaining{…} ]
+
+Received: 
+
+  1st wrap call:
+
+  Array [
+-   Anything,
+-   ObjectContaining {
+-     "params": ObjectContaining {
+-       "key": "test-key-123",
++   "https://api.holidayapi.com/v1/holidays?key=test-key-123&country=US&year=2025&month=1",
++   Object {
++     "headers": Object {
++       "User-Agent": "MyCalApp/1.0",
+      },
++     "timeout": 5000,
+    },
+  ]
+
+
+Number of calls: 1
+
+   ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should use demo key when no API key provided
+     → expected "wrap" to be called with arguments: [ Anything, ObjectContaining{…} ]
+
+Received: 
+
+  1st wrap call:
+
+  Array [
+-   Anything,
+-   ObjectContaining {
+-     "params": ObjectContaining {
+-       "key": "demo",
++   "https://api.holidayapi.com/v1/holidays?key=demo&country=US&year=2025&month=1",
++   Object {
++     "headers": Object {
++       "User-Agent": "MyCalApp/1.0",
+      },
++     "timeout": 5000,
+    },
+  ]
+
+
+Number of calls: 1
+
+   ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should throw error on network failure
+     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 18 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return work holidays for specific date
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ src/__tests__/api/workHolidays.api.test.ts:104:26
+    102|         .query({ date: '2025-03-15' });
+    103| 
+    104|       expect(res.status).toBe(200);
+       |                          ^
+    105|       expect(res.body.data).toBeInstanceOf(Array);
+    106|       expect(res.body.meta.date).toBe('2025-03-15');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/18]⎯
+
+ FAIL  src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should filter by department for specific date
+AssertionError: expected 404 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 404
+
+ ❯ src/__tests__/api/workHolidays.api.test.ts:114:26
+    112|         .query({ date: '2025-04-01', department: 'engineering' });
+    113| 
+    114|       expect(res.status).toBe(200);
+       |                          ^
+    115|       expect(res.body.meta.department).toBe('engineering');
+    116|       
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/18]⎯
+
+ FAIL  src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for missing date
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ src/__tests__/api/workHolidays.api.test.ts:128:26
+    126|         .get('/api/work-holidays/by-date');
+    127| 
+    128|       expect(res.status).toBe(400);
+       |                          ^
+    129|       expect(res.body.code).toBe('INVALID_DATE');
+    130|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/18]⎯
+
+ FAIL  src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for invalid date format
+AssertionError: expected 404 to be 400 // Object.is equality
+
+- Expected
++ Received
+
+- 400
++ 404
+
+ ❯ src/__tests__/api/workHolidays.api.test.ts:137:26
+    135|         .query({ date: '03/15/2025' });
+    136| 
+    137|       expect(res.status).toBe(400);
+       |                          ^
+    138|       expect(res.body.code).toBe('INVALID_DATE_FORMAT');
+    139|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/18]⎯
+
+ FAIL  src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return work holidays for date range
+AssertionError: expected { '2025-01': [], '2025-02': [], …(1) } to be an instance of Array
+ ❯ src/__tests__/api/workHolidays.api.test.ts:149:29
+    147| 
+    148|       expect(res.status).toBe(200);
+    149|       expect(res.body.data).toBeInstanceOf(Array);
+       |                             ^
+    150|       expect(res.body.meta.startMonth).toBe(1);
+    151|       expect(res.body.meta.endMonth).toBe(3);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/18]⎯
+
+ FAIL  src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return 400 for invalid month range
+AssertionError: expected 'INVALID_MONTH_RANGE' to be 'INVALID_RANGE' // Object.is equality
+
+- Expected
++ Received
+
+- INVALID_RANGE
++ INVALID_MONTH_RANGE
+
+ ❯ src/__tests__/api/workHolidays.api.test.ts:174:29
+    172| 
+    173|       expect(res.status).toBe(400);
+    174|       expect(res.body.code).toBe('INVALID_RANGE');
+       |                             ^
+    175|     });
+    176|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/18]⎯
+
+ FAIL  src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should successfully fetch holidays
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts:53:22
+     51|       const result = await client.fetchHolidays('US', 2025, 1);
+     52| 
+     53|       expect(result).toHaveLength(1);
+       |                      ^
+     54|       expect(result[0]).toMatchObject({
+     55|         name: "New Year's Day",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/18]⎯
+
+ FAIL  src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should truncate long holiday names
+TypeError: Cannot read properties of undefined (reading 'name')
+ ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts:111:24
+    109|       const result = await client.fetchHolidays('US', 2025, 12);
+    110| 
+    111|       expect(result[0].name).toHaveLength(200);
+       |                        ^
+    112|     });
+    113| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/18]⎯
+
+ FAIL  src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should categorize national holidays correctly
+AssertionError: expected undefined to match object { category: 'national', …(1) }
+
+- Expected: 
+Object {
+  "category": "national",
+  "isPublicHoliday": true,
+}
+
++ Received: 
+undefined
+
+ ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts:181:25
+    179|       const result = await client.fetchHolidays('US', 2025, 1);
+    180| 
+    181|       expect(result[0]).toMatchObject({
+       |                         ^
+    182|         category: 'national',
+    183|         isPublicHoliday: true
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/18]⎯
+
+ FAIL  src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should categorize observance holidays correctly
+AssertionError: expected undefined to match object { category: 'observance', …(1) }
+
+- Expected: 
+Object {
+  "category": "observance",
+  "isPublicHoliday": false,
+}
+
++ Received: 
+undefined
+
+ ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts:205:25
+    203|       const result = await client.fetchHolidays('US', 2025, 3);
+    204| 
+    205|       expect(result[0]).toMatchObject({
+       |                         ^
+    206|         category: 'observance',
+    207|         isPublicHoliday: false
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/18]⎯
+
+ FAIL  src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should handle multiple holidays in response
+AssertionError: expected [] to have a length of 2 but got +0
+
+- Expected
++ Received
+
+- 2
++ 0
+
+ ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts:234:22
+    232|       const result = await client.fetchHolidays('US', 2025, 1);
+    233| 
+    234|       expect(result).toHaveLength(2);
+       |                      ^
+    235|       expect(result.every(h => h.country === 'US')).toBe(true);
+    236|       expect(result.map(h => h.name)).toContain("New Year's Day");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/18]⎯
+
+ FAIL  src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should include API key from environment
+AssertionError: expected "wrap" to be called with arguments: [ Anything, ObjectContaining{…} ]
+
+Received: 
+
+  1st wrap call:
+
+  Array [
+-   Anything,
+-   ObjectContaining {
+-     "params": ObjectContaining {
+-       "key": "test-key-123",
++   "https://api.holidayapi.com/v1/holidays?key=test-key-123&country=US&year=2025&month=1",
++   Object {
++     "headers": Object {
++       "User-Agent": "MyCalApp/1.0",
+      },
++     "timeout": 5000,
+    },
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts:255:31
+    253|       await client.fetchHolidays('US', 2025, 1);
+    254| 
+    255|       expect(mockedAxios.get).toHaveBeenCalledWith(
+       |                               ^
+    256|         expect.anything(),
+    257|         expect.objectContaining({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/18]⎯
+
+ FAIL  src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > fetchHolidays > should use demo key when no API key provided
+AssertionError: expected "wrap" to be called with arguments: [ Anything, ObjectContaining{…} ]
+
+Received: 
+
+  1st wrap call:
+
+  Array [
+-   Anything,
+-   ObjectContaining {
+-     "params": ObjectContaining {
+-       "key": "demo",
++   "https://api.holidayapi.com/v1/holidays?key=demo&country=US&year=2025&month=1",
++   Object {
++     "headers": Object {
++       "User-Agent": "MyCalApp/1.0",
+      },
++     "timeout": 5000,
+    },
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/__tests__/services/ExternalHolidayApiClient.test.ts:282:31
+    280|       await client.fetchHolidays('US', 2025, 1);
+    281| 
+    282|       expect(mockedAxios.get).toHaveBeenCalledWith(
+       |                               ^
+    283|         expect.anything(),
+    284|         expect.objectContaining({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/18]⎯
+
+ FAIL  src/__tests__/services/ExternalHolidayApiClient.test.ts > ExternalHolidayApiClient > Error handling > should throw error on network failure
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/18]⎯
+
+ FAIL  src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should return holidays for specific month
+AssertionError: expected 0 to be greater than 0
+ ❯ src/__tests__/services/WorkHolidayService.test.ts:16:31
+     14| 
+     15|       expect(holidays).toBeInstanceOf(Array);
+     16|       expect(holidays.length).toBeGreaterThan(0);
+       |                               ^
+     17| 
+     18|       // All holidays should be in March 2025
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/18]⎯
+
+ FAIL  src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/__tests__/services/WorkHolidayService.test.ts:49:35
+     47|       const hasBreakSales = salesHolidays.some((h: any) => h.name === …
+     48| 
+     49|       expect(hasBreakEngineering).toBe(true);
+       |                                   ^
+     50|       expect(hasBreakSales).toBe(true);
+     51|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/18]⎯
+
+ FAIL  src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should return holidays for date range
+AssertionError: expected 0 to be greater than 0
+ ❯ src/__tests__/services/WorkHolidayService.test.ts:59:31
+     57| 
+     58|       expect(holidays).toBeInstanceOf(Array);
+     59|       expect(holidays.length).toBeGreaterThan(0);
+       |                               ^
+     60|     });
+     61| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/18]⎯
+
+ FAIL  src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return holiday by ID
+AssertionError: expected undefined to be 'work_eng_001' // Object.is equality
+
+- Expected: 
+"work_eng_001"
+
++ Received: 
+undefined
+
+ ❯ src/__tests__/services/WorkHolidayService.test.ts:90:27
+     88| 
+     89|       expect(holiday).toBeDefined();
+     90|       expect(holiday?.id).toBe('work_eng_001');
+       |                           ^
+     91|       expect(holiday?.name).toBe('Engineering Team Building');
+     92|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/18]⎯
+
+ Test Files  3 failed | 2 passed (5)
+      Tests  18 failed | 53 passed (71)
+   Start at  00:12:30
+   Duration  6.69s (transform 260ms, setup 0ms, collect 825ms, tests 6.24s, environment 1ms, prepare 519ms)
+
+
+ FAIL  Tests failed. Watching for file changes...
+       press h to show help, press q to quit
+[3Jc
+ RERUN  src/routes/workHolidays.routes.ts
+
+stdout | new HolidayDataProvider (/home/shreyasee/Documents/wissen/wiss/backend/src/services/HolidayDataProvider.ts:109:13)
+[HolidayDataProvider] Using source: file
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid country format
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid year
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for missing country
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid country code length
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for missing year
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid year range
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for missing month
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid month range
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /health > should return health status
+GET /health
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /unknown-route > should return 404 for unknown routes
+GET /unknown-route
+
+ ✓ src/__tests__/api/holidays.api.test.ts  (10 tests) 273ms
+stdout | new HolidayDataProvider (/home/shreyasee/Documents/wissen/wiss/backend/src/services/HolidayDataProvider.ts:109:13)
+[HolidayDataProvider] Using source: file
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return work holidays for valid year and month
+GET /api/work-holidays
+[WorkHolidayService] Getting holidays for 2025-3
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should filter by department
+GET /api/work-holidays
+[WorkHolidayService] Getting holidays for 2025-4, dept: engineering
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for missing year
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for invalid year
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for year out of range
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for missing month
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for invalid month
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for month out of range
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return work holidays for specific date
+GET /api/work-holidays/by-date
+[WorkHolidayService] Found 0 holidays in range 2025-03-15 to 2025-03-15
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should filter by department for specific date
+GET /api/work-holidays/by-date
+[WorkHolidayService] Found 0 holidays in range 2025-04-01 to 2025-04-01
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for missing date
+GET /api/work-holidays/by-date
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for invalid date format
+GET /api/work-holidays/by-date
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return work holidays for date range
+GET /api/work-holidays/by-range
+[WorkHolidayService] Getting holidays for 2025, months: 1, 2, 3
+[WorkHolidayService] Getting holidays for 2025-1
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-2
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-3
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Found holidays for 3 months
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should filter by department for date range
+GET /api/work-holidays/by-range
+[WorkHolidayService] Getting holidays for 2025, months: 1, 2, 3, 4, 5, 6, dept: sales
+[WorkHolidayService] Getting holidays for 2025-1, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-2, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-3, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-4, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-5, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-6, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Found holidays for 6 months
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return 400 for invalid month range
+GET /api/work-holidays/by-range
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/departments > should return list of all departments
+GET /api/work-holidays/departments
+
+ ❯ src/__tests__/api/workHolidays.api.test.ts  (16 tests | 2 failed) 535ms
+   ❯ src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return work holidays for date range
+     → expected { '2025-01': [], '2025-02': [], …(1) } to be an instance of Array
+   ❯ src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return 400 for invalid month range
+     → expected 'INVALID_MONTH_RANGE' to be 'INVALID_RANGE' // Object.is equality
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return work holidays for date range
+AssertionError: expected { '2025-01': [], '2025-02': [], …(1) } to be an instance of Array
+ ❯ src/__tests__/api/workHolidays.api.test.ts:149:29
+    147| 
+    148|       expect(res.status).toBe(200);
+    149|       expect(res.body.data).toBeInstanceOf(Array);
+       |                             ^
+    150|       expect(res.body.meta.startMonth).toBe(1);
+    151|       expect(res.body.meta.endMonth).toBe(3);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return 400 for invalid month range
+AssertionError: expected 'INVALID_MONTH_RANGE' to be 'INVALID_RANGE' // Object.is equality
+
+- Expected
++ Received
+
+- INVALID_RANGE
++ INVALID_MONTH_RANGE
+
+ ❯ src/__tests__/api/workHolidays.api.test.ts:174:29
+    172| 
+    173|       expect(res.status).toBe(400);
+    174|       expect(res.body.code).toBe('INVALID_RANGE');
+       |                             ^
+    175|     });
+    176|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  2 failed | 24 passed (26)
+   Start at  00:14:38
+   Duration  2.94s
+
+
+ FAIL  Tests failed. Watching for file changes...
+       press h to show help, press q to quit
+[3Jc
+ RERUN  src/routes/workHolidays.routes.ts
+
+stdout | new HolidayDataProvider (/home/shreyasee/Documents/wissen/wiss/backend/src/services/HolidayDataProvider.ts:109:13)
+[HolidayDataProvider] Using source: file
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid country format
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid year
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for missing country
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid country code length
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for missing year
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid year range
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for missing month
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /api/holidays > should return 400 for invalid month range
+GET /api/holidays
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /health > should return health status
+GET /health
+
+stdout | src/__tests__/api/holidays.api.test.ts > API - /api/holidays > GET /unknown-route > should return 404 for unknown routes
+GET /unknown-route
+
+ ✓ src/__tests__/api/holidays.api.test.ts  (10 tests) 299ms
+stdout | new HolidayDataProvider (/home/shreyasee/Documents/wissen/wiss/backend/src/services/HolidayDataProvider.ts:109:13)
+[HolidayDataProvider] Using source: file
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return work holidays for valid year and month
+GET /api/work-holidays
+[WorkHolidayService] Getting holidays for 2025-3
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should filter by department
+GET /api/work-holidays
+[WorkHolidayService] Getting holidays for 2025-4, dept: engineering
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for missing year
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for invalid year
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for year out of range
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for missing month
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for invalid month
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for month out of range
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return work holidays for specific date
+GET /api/work-holidays/by-date
+[WorkHolidayService] Found 0 holidays in range 2025-03-15 to 2025-03-15
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should filter by department for specific date
+GET /api/work-holidays/by-date
+[WorkHolidayService] Found 0 holidays in range 2025-04-01 to 2025-04-01
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for missing date
+GET /api/work-holidays/by-date
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for invalid date format
+GET /api/work-holidays/by-date
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return work holidays for date range
+GET /api/work-holidays/by-range
+[WorkHolidayService] Getting holidays for 2025, months: 1, 2, 3
+[WorkHolidayService] Getting holidays for 2025-1
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-2
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-3
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Found holidays for 3 months
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should filter by department for date range
+GET /api/work-holidays/by-range
+[WorkHolidayService] Getting holidays for 2025, months: 1, 2, 3, 4, 5, 6, dept: sales
+[WorkHolidayService] Getting holidays for 2025-1, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-2, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-3, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-4, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-5, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-6, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Found holidays for 6 months
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return 400 for invalid month range
+GET /api/work-holidays/by-range
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/departments > should return list of all departments
+GET /api/work-holidays/departments
+
+ ❯ src/__tests__/api/workHolidays.api.test.ts  (16 tests | 1 failed) 218ms
+   ❯ src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return work holidays for date range
+     → expected { '2025-01': [], '2025-02': [], …(1) } to be an instance of Array
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return work holidays for date range
+AssertionError: expected { '2025-01': [], '2025-02': [], …(1) } to be an instance of Array
+ ❯ src/__tests__/api/workHolidays.api.test.ts:149:29
+    147| 
+    148|       expect(res.status).toBe(200);
+    149|       expect(res.body.data).toBeInstanceOf(Array);
+       |                             ^
+    150|       expect(res.body.meta.startMonth).toBe(1);
+    151|       expect(res.body.meta.endMonth).toBe(3);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 25 passed (26)
+   Start at  00:14:49
+   Duration  2.44s
+
+
+ FAIL  Tests failed. Watching for file changes...
+       press h to show help, press q to quit
+[3Jc
+ RERUN  src/__tests__/services/WorkHolidayService.test.ts x1
+
+ ❯ src/__tests__/services/WorkHolidayService.test.ts  (12 tests | 3 failed) 37ms
+   ❯ src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+     → expected false to be true // Object.is equality
+   ❯ src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should return holidays for date range
+     → expected 0 to be greater than 0
+   ❯ src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return holiday by ID
+     → expected undefined to be 'work_eng_001' // Object.is equality
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should return holidays for specific month
+[WorkHolidayService] Getting holidays for 2025-9
+[WorkHolidayService] Found 3 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should filter by department
+[WorkHolidayService] Getting holidays for 2025-7, dept: Engineering
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should return empty array for month with no holidays
+[WorkHolidayService] Getting holidays for 2025-2
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+[WorkHolidayService] Getting holidays for 2025-7, dept: Engineering
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-7, dept: Sales
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should return holidays for date range
+[WorkHolidayService] Found 0 holidays in range 2025-01-01 to 2025-03-31
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should filter by department for range
+[WorkHolidayService] Found 5 holidays in range 2025-01-01 to 2025-12-31
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysByDepartment > should return specific department holidays
+[WorkHolidayService] Found 27 holidays for department Engineering
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return holiday by ID
+[WorkHolidayService] Found holiday by ID work_eng_001: no
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return null for non-existent ID
+[WorkHolidayService] Found holiday by ID nonexistent: no
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/__tests__/services/WorkHolidayService.test.ts:49:35
+     47|       const hasBreakSales = salesHolidays.some((h: any) => h.name === …
+     48| 
+     49|       expect(hasBreakEngineering).toBe(true);
+       |                                   ^
+     50|       expect(hasBreakSales).toBe(true);
+     51|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should return holidays for date range
+AssertionError: expected 0 to be greater than 0
+ ❯ src/__tests__/services/WorkHolidayService.test.ts:59:31
+     57| 
+     58|       expect(holidays).toBeInstanceOf(Array);
+     59|       expect(holidays.length).toBeGreaterThan(0);
+       |                               ^
+     60|     });
+     61| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return holiday by ID
+AssertionError: expected undefined to be 'work_eng_001' // Object.is equality
+
+- Expected: 
+"work_eng_001"
+
++ Received: 
+undefined
+
+ ❯ src/__tests__/services/WorkHolidayService.test.ts:90:27
+     88| 
+     89|       expect(holiday).toBeDefined();
+     90|       expect(holiday?.id).toBe('work_eng_001');
+       |                           ^
+     91|       expect(holiday?.name).toBe('Engineering Team Building');
+     92|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 9 passed (12)
+   Start at  00:15:06
+   Duration  69ms
+
+
+ FAIL  Tests failed. Watching for file changes...
+       press h to show help, press q to quit
+       rerun x1
+[2K[1A[2K[G[3Jc
+ RERUN  src/__tests__/services/WorkHolidayService.test.ts x2
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should return holidays for specific month
+[WorkHolidayService] Getting holidays for 2025-9
+[WorkHolidayService] Found 3 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should filter by department
+[WorkHolidayService] Getting holidays for 2025-7, dept: Engineering
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should return empty array for month with no holidays
+[WorkHolidayService] Getting holidays for 2025-2
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+[WorkHolidayService] Getting holidays for 2025-7, dept: Engineering
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-7, dept: Sales
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should return holidays for date range
+[WorkHolidayService] Found 0 holidays in range 2025-01-01 to 2025-03-31
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should filter by department for range
+[WorkHolidayService] Found 5 holidays in range 2025-01-01 to 2025-12-31
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysByDepartment > should return specific department holidays
+[WorkHolidayService] Found 27 holidays for department Engineering
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return holiday by ID
+[WorkHolidayService] Found holiday by ID work_2025_09_001: yes
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return null for non-existent ID
+[WorkHolidayService] Found holiday by ID nonexistent: no
+
+ ❯ src/__tests__/services/WorkHolidayService.test.ts  (12 tests | 2 failed) 30ms
+   ❯ src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+     → expected false to be true // Object.is equality
+   ❯ src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should return holidays for date range
+     → expected 0 to be greater than 0
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/__tests__/services/WorkHolidayService.test.ts:49:35
+     47|       const hasBreakSales = salesHolidays.some((h: any) => h.name === …
+     48| 
+     49|       expect(hasBreakEngineering).toBe(true);
+       |                                   ^
+     50|       expect(hasBreakSales).toBe(true);
+     51|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should return holidays for date range
+AssertionError: expected 0 to be greater than 0
+ ❯ src/__tests__/services/WorkHolidayService.test.ts:59:31
+     57| 
+     58|       expect(holidays).toBeInstanceOf(Array);
+     59|       expect(holidays.length).toBeGreaterThan(0);
+       |                               ^
+     60|     });
+     61| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 10 passed (12)
+   Start at  00:15:32
+   Duration  79ms
+
+
+ FAIL  Tests failed. Watching for file changes...
+       press h to show help, press q to quit
+       rerun x2
+[2K[1A[2K[G[3Jc
+ RERUN  src/__tests__/services/WorkHolidayService.test.ts x3
+
+ ❯ src/__tests__/services/WorkHolidayService.test.ts  (12 tests | 1 failed) 30ms
+   ❯ src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+     → expected false to be true // Object.is equality
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should return holidays for specific month
+[WorkHolidayService] Getting holidays for 2025-9
+[WorkHolidayService] Found 3 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should filter by department
+[WorkHolidayService] Getting holidays for 2025-7, dept: Engineering
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should return empty array for month with no holidays
+[WorkHolidayService] Getting holidays for 2025-2
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+[WorkHolidayService] Getting holidays for 2025-7, dept: Engineering
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-7, dept: Sales
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should return holidays for date range
+[WorkHolidayService] Found 11 holidays in range 2025-09-01 to 2025-12-31
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysInRange > should filter by department for range
+[WorkHolidayService] Found 5 holidays in range 2025-01-01 to 2025-12-31
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysByDepartment > should return specific department holidays
+[WorkHolidayService] Found 27 holidays for department Engineering
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return holiday by ID
+[WorkHolidayService] Found holiday by ID work_2025_09_001: yes
+
+stdout | src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidayById > should return null for non-existent ID
+[WorkHolidayService] Found holiday by ID nonexistent: no
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/services/WorkHolidayService.test.ts > WorkHolidayService > getHolidaysForMonth > should include company-wide holidays regardless of department
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/__tests__/services/WorkHolidayService.test.ts:49:35
+     47|       const hasBreakSales = salesHolidays.some((h: any) => h.name === …
+     48| 
+     49|       expect(hasBreakEngineering).toBe(true);
+       |                                   ^
+     50|       expect(hasBreakSales).toBe(true);
+     51|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 11 passed (12)
+   Start at  00:15:46
+   Duration  56ms
+
+
+ FAIL  Tests failed. Watching for file changes...
+       press h to show help, press q to quit
+       rerun x3
+[2K[1A[2K[G[3Jc
+ RERUN  src/__tests__/api/workHolidays.api.test.ts x3
+
+stdout | new HolidayDataProvider (/home/shreyasee/Documents/wissen/wiss/backend/src/services/HolidayDataProvider.ts:109:13)
+[HolidayDataProvider] Using source: file
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return work holidays for valid year and month
+GET /api/work-holidays
+[WorkHolidayService] Getting holidays for 2025-3
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should filter by department
+GET /api/work-holidays
+[WorkHolidayService] Getting holidays for 2025-4, dept: engineering
+[WorkHolidayService] Found 0 work holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for missing year
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for invalid year
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for year out of range
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for missing month
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for invalid month
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays > should return 400 for month out of range
+GET /api/work-holidays
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return work holidays for specific date
+GET /api/work-holidays/by-date
+[WorkHolidayService] Found 0 holidays in range 2025-03-15 to 2025-03-15
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should filter by department for specific date
+GET /api/work-holidays/by-date
+[WorkHolidayService] Found 0 holidays in range 2025-04-01 to 2025-04-01
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for missing date
+GET /api/work-holidays/by-date
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-date > should return 400 for invalid date format
+GET /api/work-holidays/by-date
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return work holidays for date range
+GET /api/work-holidays/by-range
+[WorkHolidayService] Getting holidays for 2025, months: 1, 2, 3
+[WorkHolidayService] Getting holidays for 2025-1
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-2
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-3
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Found holidays for 3 months
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should filter by department for date range
+GET /api/work-holidays/by-range
+[WorkHolidayService] Getting holidays for 2025, months: 1, 2, 3, 4, 5, 6, dept: sales
+[WorkHolidayService] Getting holidays for 2025-1, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-2, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-3, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-4, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-5, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Getting holidays for 2025-6, dept: sales
+[WorkHolidayService] Found 0 work holidays
+[WorkHolidayService] Found holidays for 6 months
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/by-range > should return 400 for invalid month range
+GET /api/work-holidays/by-range
+
+stdout | src/__tests__/api/workHolidays.api.test.ts > API - /api/work-holidays > GET /api/work-holidays/departments > should return list of all departments
+GET /api/work-holidays/departments
+
+ ✓ src/__tests__/api/workHolidays.api.test.ts  (16 tests) 269ms
+
+ Test Files  1 passed (1)
+      Tests  16 passed (16)
+   Start at  00:17:51
+   Duration  1.07s
+
+
+ PASS  Waiting for file changes...
+       press h to show help, press q to quit
+       rerun x3
+[2K[1A[2K[G

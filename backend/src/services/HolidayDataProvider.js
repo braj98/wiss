@@ -1,11 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
-import { RegularHoliday } from '../types/index.js';
 import { ExternalHolidayApiClient } from './ExternalHolidayApiClient.js';
 
-// Mock holidays data (fallback when API fails and file doesn't have country)
-const MOCK_HOLIDAYS: RegularHoliday[] = [
+const MOCK_HOLIDAYS = [
   {
     id: 'mock_1',
     name: "New Year's Day",
@@ -28,8 +26,7 @@ const MOCK_HOLIDAYS: RegularHoliday[] = [
   }
 ];
 
-// Indian holidays for demo (additional to file data)
-const INDIAN_HOLIDAYS: RegularHoliday[] = [
+const INDIAN_HOLIDAYS = [
   {
     id: 'ind_1',
     name: 'Republic Day',
@@ -92,27 +89,15 @@ const INDIAN_HOLIDAYS: RegularHoliday[] = [
   }
 ];
 
-/**
- * HolidayDataProvider
- *
- * Provides holiday data from multiple sources based on HOLIDAY_SOURCE environment variable.
- * Supports 3 modes: 'file', 'mock', 'api'
- */
 export class HolidayDataProvider {
-  private source: string;
-  private fileCache: any = null;
-  private apiClient: ExternalHolidayApiClient;
-
   constructor() {
+    this.fileCache = null;
     this.source = this.getHolidaySource();
     this.apiClient = new ExternalHolidayApiClient();
     console.log(`[HolidayDataProvider] Using source: ${this.source}`);
   }
 
-  /**
-   * Get holidays for a country, year, and month
-   */
-  async getHolidays(country: string, year: number, month: number): Promise<RegularHoliday[]> {
+  async getHolidays(country, year, month) {
     switch (this.source) {
       case 'file':
         return this.getHolidaysFromFile(country, year, month);
@@ -125,20 +110,14 @@ export class HolidayDataProvider {
     }
   }
 
-  /**
-   * Get holidays from JSON file
-   */
-  private async getHolidaysFromFile(country: string, year: number, month: number): Promise<RegularHoliday[]> {
+  async getHolidaysFromFile(country, year, month) {
     try {
-      // Load file if not cached
       if (!this.fileCache) {
         const __dirname = path.dirname(fileURLToPath(import.meta.url));
         const filePath = path.resolve(__dirname, '../../data/holidays.json');
-
         console.log(`[HolidayDataProvider] Loading holidays from file: ${filePath}`);
         console.log(`[HolidayDataProvider] __dirname: ${__dirname}`);
         console.log(`[HolidayDataProvider] File exists: ${fs.existsSync(filePath)}`);
-
         if (fs.existsSync(filePath)) {
           const fileContent = fs.readFileSync(filePath, 'utf-8');
           this.fileCache = JSON.parse(fileContent);
@@ -148,20 +127,14 @@ export class HolidayDataProvider {
           throw new Error(`Holiday data file not found: ${filePath}`);
         }
       }
-
-      // Find the correct year key (e.g., "IN_2025" for country IN and year 2025)
       const yearKey = `${country}_${year}`;
       const countryHolidays = this.fileCache?.countries?.[yearKey] || [];
-
       console.log(`[HolidayDataProvider] Found ${countryHolidays.length} holidays for ${yearKey} in ${year}-${month}`);
-
-      // Filter by month
-      const filteredHolidays = countryHolidays.filter((holiday: RegularHoliday) => {
+      const filteredHolidays = countryHolidays.filter((holiday) => {
         const holidayMonth = parseInt(holiday.date.split('-')[1]);
         const matches = holidayMonth === month;
         return matches;
       });
-
       console.log(`[HolidayDataProvider] Returning ${filteredHolidays.length} filtered holidays for ${country} ${year}-${month}`);
       return filteredHolidays;
     } catch (error) {
@@ -171,29 +144,20 @@ export class HolidayDataProvider {
     }
   }
 
-  /**
-   * Get holidays from mock data
-   */
-  private getHolidaysFromMock(country: string, _year: number, month: number): RegularHoliday[] {
-    let holidays: RegularHoliday[] = [];
-
+  getHolidaysFromMock(country, _year, month) {
+    let holidays = [];
     if (country === 'IN') {
       holidays = INDIAN_HOLIDAYS;
     } else {
-      // For other countries, use generic mock holidays
       holidays = MOCK_HOLIDAYS.map(h => ({ ...h, country }));
     }
-
     return holidays.filter((holiday) => {
       const holidayMonth = parseInt(holiday.date.split('-')[1]);
       return holidayMonth === month;
     });
   }
 
-  /**
-   * Get holidays from external API
-   */
-  private async getHolidaysFromApi(country: string, year: number, month: number): Promise<RegularHoliday[]> {
+  async getHolidaysFromApi(country, year, month) {
     try {
       return await this.apiClient.fetchHolidays(country, year, month);
     } catch (error) {
@@ -202,29 +166,20 @@ export class HolidayDataProvider {
     }
   }
 
-  /**
-   * Get current source
-   */
-  getSource(): string {
+  getSource() {
     return this.source;
   }
 
-  /**
-   * Check if a valid API key is configured
-   */
-  hasValidApiKey(): boolean {
+  hasValidApiKey() {
     const apiKey = process.env.HOLIDAY_API_KEY;
     return apiKey !== undefined && apiKey !== 'demo' && apiKey !== '';
   }
 
-  /**
-   * Get holiday source from environment
-   */
-  private getHolidaySource(): string {
+  getHolidaySource() {
     const source = process.env.HOLIDAY_SOURCE?.toLowerCase();
     if (source === 'file' || source === 'mock' || source === 'api') {
       return source;
     }
-    return 'file'; // Default to file for demo
+    return 'file';
   }
 }

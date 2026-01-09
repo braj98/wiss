@@ -5,7 +5,13 @@
  * Single Responsibility: HTTP requests to backend
  */
 
-import type { RegularHoliday, WorkHoliday, ApiResponse, ApiError } from '../../types/index.js';
+import type { RegularHoliday, WorkHoliday, HolidayError } from '../../types/holiday.js';
+import type { ApiResponse } from '../../types/api.js';
+
+interface ApiError {
+  code?: string;
+  message?: string;
+}
 
 export interface FetchHolidaysParams {
   country: string;
@@ -43,7 +49,7 @@ export class HolidayApiClient {
   private timeout: number;
 
   constructor(
-    baseUrl: string = import.meta.env.VITE_API_BASE_URL || '',
+    baseUrl: string = (import.meta as any).env?.VITE_API_BASE_URL || '',
     timeout: number = 10000
   ) {
     this.baseUrl = baseUrl;
@@ -81,12 +87,30 @@ export class HolidayApiClient {
       endMonth: params.endMonth.toString()
     }).toString();
 
+    console.log('Fetching regular holidays for range:', `/api/holidays/by-range?${queryString}`);
+
     const response = await this.get<{
       data: Record<string, RegularHoliday[]>;
       meta: Record<string, any>;
     }>(`/api/holidays/by-range?${queryString}`);
 
-    return response.data;
+    console.log('Regular holidays response:', response);
+
+    // Transform the response from date-keyed to month-keyed
+    const result: Record<string, RegularHoliday[]> = {};
+
+    Object.entries(response.data).forEach(([dateKey, holidays]) => {
+      // dateKey is like "2026-01-01", extract month as "2026-01"
+      const monthKey = dateKey.substring(0, 7); // "2026-01"
+      if (!result[monthKey]) {
+        result[monthKey] = [];
+      }
+      result[monthKey].push(...holidays);
+    });
+
+    console.log('Transformed regular holidays:', result);
+
+    return result;
   }
 
   /**
@@ -201,7 +225,7 @@ export class HolidayApiClient {
         throw new ApiClientError(
           error.message || `HTTP ${response.status}`,
           response.status,
-          error.code
+          error.code || 'UNKNOWN_ERROR'
         );
       }
 

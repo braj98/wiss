@@ -1,53 +1,27 @@
-import axios, { AxiosResponse } from 'axios';
-import { RegularHoliday, ExternalApiHoliday } from '../types/index.js';
+import axios from 'axios';
 
-/**
- * Custom error class for API errors
- */
 export class ApiError extends Error {
-  constructor(
-    message: string,
-    public statusCode?: number,
-    public isRetryable: boolean = false
-  ) {
+  constructor(message, statusCode, isRetryable = false) {
     super(message);
+    this.statusCode = statusCode;
+    this.isRetryable = isRetryable;
     this.name = 'ApiError';
   }
 }
 
-/**
- * ExternalHolidayApiClient
- *
- * Service for fetching holiday data from external APIs with intelligent retry logic.
- * Follows Single Responsibility Principle - only handles external API communication.
- */
 export class ExternalHolidayApiClient {
-  private readonly baseUrl = 'https://api.holidayapi.com/v1/holidays';
-  private readonly timeoutMs = 5000; // 5 seconds
-  private readonly maxRetries = 3;
-  private readonly baseDelayMs = 1000; // 1 second
-  private readonly maxDelayMs = 8000; // 8 seconds
-
   constructor() {
-    // Constructor can accept config if needed in future
+    this.baseUrl = 'https://api.holidayapi.com/v1/holidays';
+    this.timeoutMs = 5000;
+    this.maxRetries = 3;
+    this.baseDelayMs = 1000;
+    this.maxDelayMs = 8000;
   }
 
-  /**
-   * Fetch holidays for a specific country, year, and month
-   */
-  public async fetchHolidays(
-    country: string,
-    year: number,
-    month: number
-  ): Promise<RegularHoliday[]> {
+  async fetchHolidays(country, year, month) {
     console.log(`[ExternalHolidayApiClient] Fetching holidays for ${country} ${year}-${month}`);
-
     try {
-      const holidays = await this.fetchWithRetry(
-        () => this.callExternalApi(country, year, month),
-        0
-      );
-
+      const holidays = await this.fetchWithRetry(() => this.callExternalApi(country, year, month), 0);
       console.log(`[ExternalHolidayApiClient] Successfully fetched ${holidays.length} holidays`);
       return holidays;
     } catch (error) {
@@ -56,35 +30,23 @@ export class ExternalHolidayApiClient {
     }
   }
 
-  /**
-   * Make HTTP request to external holiday API
-   */
-  private async callExternalApi(
-    country: string,
-    year: number,
-    month: number
-  ): Promise<RegularHoliday[]> {
+  async callExternalApi(country, year, month) {
     const apiKey = process.env.HOLIDAY_API_KEY || 'demo';
     const url = `${this.baseUrl}?key=${apiKey}&country=${country}&year=${year}&month=${month}`;
-
     console.log(`[ExternalHolidayApiClient] Calling API: ${url.replace(apiKey, '***')}`);
-
     try {
-      const response: AxiosResponse = await axios.get(url, {
+      const response = await axios.get(url, {
         timeout: this.timeoutMs,
         headers: {
           'User-Agent': 'MyCalApp/1.0'
         }
       });
-
       return this.transformResponse(response.data.holidays || [], country);
-    } catch (error: any) {
+    } catch (error) {
       console.error('[ExternalHolidayApiClient] API call failed:', error.message);
-
       if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
         throw new ApiError('Request timeout', undefined, true);
       }
-
       if (error.response) {
         const status = error.response.status;
         if (status === 429 || (status >= 500 && status < 600)) {
@@ -93,76 +55,51 @@ export class ExternalHolidayApiClient {
           throw new ApiError(`HTTP ${status}`, status, false);
         }
       }
-
       throw new ApiError('Network error', undefined, true);
     }
   }
 
-  /**
-   * Transform external API response to internal RegularHoliday format
-   */
-  private transformResponse(
-    holidays: ExternalApiHoliday[],
-    country: string
-  ): RegularHoliday[] {
+  transformResponse(holidays, country) {
     return holidays.map((holiday) => ({
       id: this.generateId(holiday, country),
       name: this.truncateName(holiday.name || 'Unknown Holiday'),
       date: holiday.date,
       country: country.toUpperCase(),
-      region: null, // External API doesn't provide regions
+      region: null,
       category: this.determineCategory(holiday),
       description: holiday.description || holiday.name || 'Holiday',
       isPublicHoliday: holiday.type?.includes('public_holiday') || false
     }));
   }
 
-  /**
-   * Generate unique ID for holiday
-   */
-  private generateId(holiday: ExternalApiHoliday, country: string): string {
+  generateId(holiday, country) {
     const date = holiday.date;
     const name = holiday.name?.replace(/\s+/g, '_').toLowerCase() || 'unknown';
     return `ext_${country}_${date}_${name}`.substring(0, 100);
   }
 
-  /**
-   * Truncate holiday names to 200 characters
-   */
-  private truncateName(name: string): string {
+  truncateName(name) {
     return name.length > 200 ? name.substring(0, 200) : name;
   }
 
-  /**
-   * Determine holiday category from external API data
-   */
-  private determineCategory(holiday: ExternalApiHoliday): 'national' | 'observance' {
+  determineCategory(holiday) {
     if (holiday.type?.includes('public_holiday') || holiday.type?.includes('national')) {
       return 'national';
     }
     return 'observance';
   }
 
-  /**
-   * Recursive retry logic with exponential backoff
-   */
-  private async fetchWithRetry<T>(
-    fn: () => Promise<T>,
-    attempt: number
-  ): Promise<T> {
+  async fetchWithRetry(fn, attempt) {
     try {
       return await fn();
-    } catch (error: any) {
+    } catch (error) {
       const isRetryable = error instanceof ApiError ? error.isRetryable : false;
-
       if (!isRetryable || attempt >= this.maxRetries) {
         console.log(`[ExternalHolidayApiClient] Not retrying (attempt ${attempt + 1}):`, error.message);
         throw error;
       }
-
       const delay = Math.min(this.baseDelayMs * Math.pow(2, attempt), this.maxDelayMs);
       console.log(`[ExternalHolidayApiClient] Retrying in ${delay}ms (attempt ${attempt + 1}/${this.maxRetries + 1})`);
-
       await new Promise(resolve => setTimeout(resolve, delay));
       return this.fetchWithRetry(fn, attempt + 1);
     }

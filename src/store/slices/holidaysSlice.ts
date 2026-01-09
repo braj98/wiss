@@ -12,16 +12,16 @@ import type { RegularHoliday, WorkHoliday, HolidayError } from '../../types/holi
 interface HolidaysState {
   // Selected date
   selectedDate: string;
-  
+
   // Calendar view state
   currentYear: number;
   currentMonth: number;
   selectedCountry: string;
-  
-  // Data
-  regularHolidays: RegularHoliday[];
-  workHolidays: WorkHoliday[];
-  
+
+  // Data - now supports multiple months
+  regularHolidays: Record<string, RegularHoliday[]>; // key: "YYYY-MM"
+  workHolidays: Record<string, WorkHoliday[]>; // key: "YYYY-MM"
+
   // State
   loading: boolean;
   error: HolidayError | null;
@@ -34,8 +34,8 @@ const initialState: HolidaysState = {
   currentYear: new Date().getFullYear(),
   currentMonth: new Date().getMonth() + 1,
   selectedCountry: 'DE',
-  regularHolidays: [],
-  workHolidays: [],
+  regularHolidays: {},
+  workHolidays: {},
   loading: false,
   error: null,
   lastFetchedAt: null
@@ -92,12 +92,58 @@ export const fetchAllHolidays = createAsyncThunk(
         holidayApiClient.fetchHolidays({ country, year, month }),
         holidayApiClient.fetchWorkHolidays({ year, month, department })
       ]);
-      
+
       return { regularHolidays, workHolidays };
     } catch (error: any) {
       return rejectWithValue({
         code: error.code || 'UNKNOWN_ERROR',
         message: error.message || 'Failed to fetch holidays',
+        retryable: error.statusCode !== 400
+      });
+    }
+  }
+);
+
+export const fetchHolidaysForRange = createAsyncThunk(
+  'holidays/fetchHolidaysForRange',
+  async (
+    {
+      country,
+      year,
+      startMonth,
+      endMonth,
+      department
+    }: {
+      country: string;
+      year: number;
+      startMonth: number;
+      endMonth: number;
+      department?: string
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      // Fetch holidays for the range using the new range APIs
+      const [regularHolidaysRange, workHolidaysRange] = await Promise.all([
+        holidayApiClient.fetchHolidaysByRange({
+          country,
+          year,
+          startMonth,
+          endMonth
+        }),
+        holidayApiClient.fetchWorkHolidaysByRange({
+          year,
+          startMonth,
+          endMonth,
+          department
+        })
+      ]);
+
+      return { regularHolidaysRange, workHolidaysRange };
+    } catch (error: any) {
+      return rejectWithValue({
+        code: error.code || 'UNKNOWN_ERROR',
+        message: error.message || 'Failed to fetch holidays for range',
         retryable: error.statusCode !== 400
       });
     }
@@ -138,7 +184,7 @@ const holidaysSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    // fetchRegularHolidays
+    // fetchRegularHolidays - single month
     builder
       .addCase(fetchRegularHolidays.pending, (state) => {
         state.loading = true;
@@ -146,7 +192,8 @@ const holidaysSlice = createSlice({
       })
       .addCase(fetchRegularHolidays.fulfilled, (state, action) => {
         state.loading = false;
-        state.regularHolidays = action.payload;
+        // For backward compatibility, store in a generic key
+        state.regularHolidays['current'] = action.payload;
         state.lastFetchedAt = Date.now();
       })
       .addCase(fetchRegularHolidays.rejected, (state, action) => {
@@ -154,7 +201,7 @@ const holidaysSlice = createSlice({
         state.error = action.payload as HolidayError;
       });
 
-    // fetchWorkHolidays
+    // fetchWorkHolidays - single month
     builder
       .addCase(fetchWorkHolidays.pending, (state) => {
         state.loading = true;
@@ -162,7 +209,8 @@ const holidaysSlice = createSlice({
       })
       .addCase(fetchWorkHolidays.fulfilled, (state, action) => {
         state.loading = false;
-        state.workHolidays = action.payload;
+        // For backward compatibility, store in a generic key
+        state.workHolidays['current'] = action.payload;
         state.lastFetchedAt = Date.now();
       })
       .addCase(fetchWorkHolidays.rejected, (state, action) => {
@@ -170,7 +218,7 @@ const holidaysSlice = createSlice({
         state.error = action.payload as HolidayError;
       });
 
-    // fetchAllHolidays
+    // fetchAllHolidays - single month
     builder
       .addCase(fetchAllHolidays.pending, (state) => {
         state.loading = true;
@@ -178,13 +226,46 @@ const holidaysSlice = createSlice({
       })
       .addCase(fetchAllHolidays.fulfilled, (state, action) => {
         state.loading = false;
-        state.regularHolidays = action.payload.regularHolidays;
-        state.workHolidays = action.payload.workHolidays;
+        // For backward compatibility, store in a generic key
+        state.regularHolidays['current'] = action.payload.regularHolidays;
+        state.workHolidays['current'] = action.payload.workHolidays;
         state.lastFetchedAt = Date.now();
       })
       .addCase(fetchAllHolidays.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as HolidayError;
+      });
+
+    // fetchHolidaysForRange - multiple months
+    builder
+      .addCase(fetchHolidaysForRange.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchHolidaysForRange.fulfilled, (state, action) => {
+        state.loading = false;
+
+        const { year } = action.meta.arg; // Get year from the original arguments
+
+        console.log('Redux: Storing holidays for range', action.payload);
+
+        // Store regular holidays by month - they are already in YYYY-MM format
+        Object.assign(state.regularHolidays, action.payload.regularHolidaysRange);
+        console.log('Redux: Regular holidays stored:', state.regularHolidays);
+
+        // Store work holidays by month - convert month number to YYYY-MM format
+        Object.entries(action.payload.workHolidaysRange).forEach(([monthNum, holidays]) => {
+          const monthKey = `${year}-${String(monthNum).padStart(2, '0')}`;
+          state.workHolidays[monthKey] = holidays;
+        });
+        console.log('Redux: Work holidays stored:', state.workHolidays);
+
+        state.lastFetchedAt = Date.now();
+      })
+      .addCase(fetchHolidaysForRange.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as HolidayError;
+        console.error('Redux: fetchHolidaysForRange failed:', action.payload);
       });
   }
 });

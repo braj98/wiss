@@ -27,6 +27,23 @@ body {
 .app-header {
   text-align: center;
   margin-bottom: 24px;
+  position: relative;
+}
+
+.app-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .app-header h1 {
@@ -47,13 +64,48 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 20px;
-  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-group label {
+  font-size: 0.875rem;
+  color: #666;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.control-group select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.875rem;
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.control-group.navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.current-date {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1a1a2e;
+  min-width: 140px;
+  text-align: center;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
 }
 
 .control-group {
@@ -68,23 +120,32 @@ body {
 }
 
 .control-group select {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  padding: 10px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
   font-size: 0.875rem;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  color: #374151;
 }
 
 .control-group select:hover {
-  border-color: #1976d2;
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
 }
 
 .control-group select:focus {
   outline: none;
-  border-color: #1976d2;
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+  border-color: #3b82f6;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
 }
 
 .navigation {
@@ -118,6 +179,173 @@ body {
 .nav-btn:hover {
   background: #f0f0f0;
   border-color: #1976d2;
+}
+
+.nav-btn:disabled {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.nav-btn:disabled:hover {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+}
+
+/* Accessibility: Focus indicators */
+.nav-btn:focus,
+.today-btn:focus,
+select:focus,
+.tab-btn:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .nav-btn,
+  .today-btn,
+  .tab-btn {
+    border: 2px solid #000;
+  }
+  
+  .nav-btn:focus,
+  .today-btn:focus,
+  .tab-btn:focus {
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+  }
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .app {
+    padding: 12px;
+    min-height: 100vh;
+  }
+
+  .app-header h1 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 0.875rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .control-group {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .control-group.navigation {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .current-date {
+    min-width: auto;
+    width: 100%;
+    order: -1;
+  }
+
+  .nav-btn,
+  .today-btn {
+    min-height: 44px;
+    min-width: 44px;
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .boundary-indicator {
+    width: 100%;
+    text-align: center;
+    margin-left: 0;
+    margin-top: 8px;
+  }
+
+  .tab-navigation {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tab-btn {
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .control-group select {
+    min-width: 100%;
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .nav-btn {
+    font-size: 1.25rem;
+  }
+
+  .calendar-3month {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .calendar-month {
+    padding: 8px;
+  }
+
+  .calendar-day {
+    min-height: 40px;
+    font-size: 0.875rem;
+  }
+
+  .day-number {
+    font-size: 0.875rem;
+  }
+
+  .holiday-marker {
+    font-size: 0.75rem;
+  }
+
+  .week-indicator {
+    font-size: 0.6rem;
+    top: 4px;
+    right: 4px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .nav-btn,
+  .today-btn,
+  .tab-btn,
+  .calendar-day {
+    transition: none;
+  }
+}
+
+.boundary-indicator {
+  font-size: 0.75rem;
+  color: #f57c00;
+  background: #fff3e0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+  border: 1px solid #ffcc02;
+  cursor: help;
 }
 
 .today-btn {
@@ -217,6 +445,37 @@ body {
 
 .error-icon {
   font-size: 1.25rem;
+}
+
+/* Offline and Stale Data Indicators */
+.offline-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #fff3e0;
+  border: 1px solid #ffcc02;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  color: #e65100;
+}
+
+.stale-data-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #f3e5f5;
+  border: 1px solid #ce93d8;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  color: #6a1b9a;
+}
+
+.offline-icon,
+.stale-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
 }
 
 /* App Content */
