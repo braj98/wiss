@@ -336,6 +336,32 @@
 
   .calendar-month {
     padding: 12px;
+    scroll-margin-top: 20px; /* For smooth scrolling to current month */
+  }
+
+  /* Make current month more prominent on mobile */
+  .calendar-month.current-month {
+    border-color: #1976d2;
+    border-width: 3px;
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.2);
+    position: relative;
+  }
+
+  .calendar-month.current-month::before {
+    content: "📅 CURRENT MONTH";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1976d2;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
   .calendar-header h2 {

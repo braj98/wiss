@@ -224,62 +224,137 @@ select:focus,
   .app {
     padding: 12px;
     min-height: 100vh;
+    padding-bottom: 80px; /* Space for bottom navigation */
+  }
+
+  /* Header Layout for Mobile */
+  .app-header {
+    position: relative;
+    text-align: center;
+    margin-bottom: 20px;
   }
 
   .app-header h1 {
     font-size: 2rem;
+    margin-bottom: 8px;
   }
 
   .subtitle {
     font-size: 0.875rem;
+    margin-bottom: 16px;
+  }
+
+  /* Move controls below title on mobile */
+  .app-controls {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
   }
 
   .controls {
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     align-items: stretch;
+    margin-bottom: 20px;
   }
 
-  .control-group {
+  /* Tab navigation */
+  .control-group.tabs {
+    order: 1;
     justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .control-group.navigation {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .current-date {
-    min-width: auto;
-    width: 100%;
-    order: -1;
-  }
-
-  .nav-btn,
-  .today-btn {
-    min-height: 44px;
-    min-width: 44px;
-    font-size: 1rem;
-    padding: 12px;
-  }
-
-  .boundary-indicator {
-    width: 100%;
-    text-align: center;
-    margin-left: 0;
-    margin-top: 8px;
-  }
-
-  .tab-navigation {
-    flex-direction: column;
-    gap: 8px;
   }
 
   .tab-btn {
+    flex: 1;
     min-height: 44px;
     padding: 12px 16px;
     font-size: 1rem;
+  }
+
+  /* Bottom navigation */
+  .control-group.navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    padding: 12px 16px;
+    z-index: 1000;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    order: 2;
+  }
+
+  .current-date {
+    font-size: 0.875rem;
+    min-width: auto;
+    flex: 1;
+    text-align: center;
+    order: 2;
+  }
+
+  .nav-btn {
+    min-height: 44px;
+    min-width: 44px;
+    font-size: 1.25rem;
+    padding: 8px;
+    order: 1;
+  }
+
+  .today-btn {
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    order: 3;
+  }
+
+  .boundary-indicator {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    text-align: center;
+    margin: 0;
+    background: rgba(245, 124, 0, 0.9);
+    color: white;
+    border-radius: 6px 6px 0 0;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  /* Control groups */
+  .control-group {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .control-group select {
+    flex: 1;
+    min-width: 120px;
+    max-width: 160px;
+  }
+
+  .control-group.size-control {
+    justify-content: center;
   }
 }
 
